@@ -224,44 +224,89 @@
         </div>
       </section>
 
-      <!-- TAB 4: Study Flashcards -->
+            <!-- TAB 4: Study Flashcards -->
       <section id="tab-flashcards" class="tab-pane">
-        <div class="section-header" style="justify-content: center; text-align: center;">
+        <div class="section-header" style="justify-content: center; text-align: center; margin-bottom: 1.5rem;">
           <div>
             <h2 class="section-title" style="justify-content: center;">
-              <i class="fas fa-layer-group text-emerald"></i> Active Recall Flashcard Hub
+              <i class="fas fa-layer-group text-emerald"></i> Active Recall Flashcard Studio
             </h2>
-            <p class="section-subtitle">Test and consolidate your knowledge of the 200 dimensions, Arabic roots, and Quranic wisdom.</p>
+            <p class="section-subtitle">Spaced repetition and active recall system across all 200 dimensions, Arabic roots, and Quranic wisdom.</p>
+          </div>
+        </div>
+
+        <div class="flashcard-studio-header">
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <label for="flash-category-select" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">Filter Domain:</label>
+            <select id="flash-category-select" class="flashcard-category-select">
+              <option value="all">All 200 Dimensions (Full Deck)</option>
+              <option value="Arabic Linguistics & Grammar">Arabic Linguistics & Grammar (20)</option>
+              <option value="Quranic Sciences & Memorization">Quranic Sciences & Memorization (20)</option>
+              <option value="Theology & Creed (Aqeedah)">Theology & Creed (Aqeedah) (20)</option>
+              <option value="Pillars & Acts of Worship (Ibadat)">Pillars & Acts of Worship (Ibadat) (20)</option>
+              <option value="Spiritual Purification & Ethics (Tazkiyah)">Spiritual Purification & Ethics (20)</option>
+              <option value="Prophetic History & Seerah">Prophetic History & Seerah (20)</option>
+              <option value="Jurisprudence & Ethics (Fiqh & Maqasid)">Jurisprudence & Ethics (20)</option>
+              <option value="Islamic Civilization & Sciences">Islamic Civilization & Sciences (20)</option>
+              <option value="Contemporary Daily Life & Well-Being">Daily Life & Well-Being (20)</option>
+              <option value="Cosmology & Signs in Nature (Ayat al-Afaq)">Cosmology & Signs in Nature (20)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <button id="flash-shuffle-btn" class="btn-filter-toggle" title="Shuffle Current Deck">
+              <i class="fas fa-shuffle"></i> <span>Shuffle</span>
+            </button>
           </div>
         </div>
 
         <div class="flashcards-container">
-          <div id="flashcard-wrapper" class="flashcard-wrapper">
+          <div class="flashcard-progress-bar-wrap">
+            <div id="flashcard-progress-bar" class="flashcard-progress-bar-fill" style="width: 1%;"></div>
+          </div>
+
+          <div id="flashcard-wrapper" class="flashcard-wrapper" title="Click or Press Space to Flip Card">
             <div id="flashcard-front" class="flashcard-face flashcard-front">
-              <!-- Rendered by app.js -->
+              <!-- Rendered dynamically by app.js -->
             </div>
             <div id="flashcard-back" class="flashcard-face flashcard-back">
-              <!-- Rendered by app.js -->
+              <!-- Rendered dynamically by app.js -->
             </div>
           </div>
 
-          <div style="text-align: center; margin-top: 1.25rem; font-weight: 700; color: var(--accent-gold-bright); font-family: monospace;">
-            Card <span id="flashcard-current-num">1</span> of <span id="flashcard-total-num">200</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="font-weight: 700; color: var(--accent-gold-bright); font-family: monospace; font-size: 0.9rem;">
+              Card <span id="flashcard-current-num">1</span> of <span id="flashcard-total-num">200</span>
+              <span id="flashcard-mastered-count" style="color: var(--accent-emerald-bright); margin-left: 0.75rem;">• 0 Mastered</span>
+            </div>
+
+            <div class="flashcard-mastery-group">
+              <button id="btn-mark-mastered" class="btn-mastery" title="Mark this card as Mastered">
+                <i class="fas fa-check"></i> Mark Mastered
+              </button>
+            </div>
           </div>
 
-          <div class="flashcard-controls">
-            <button id="flash-prev-btn" class="btn-flash-ctrl" title="Previous Flashcard (Left Arrow)">
-              <i class="fas fa-arrow-left"></i> Previous
+          <div class="flashcard-controls-hub">
+            <div class="flashcard-nav-group">
+              <button id="flash-prev-btn" class="btn-flash-action" title="Previous Card (Left Arrow)">
+                <i class="fas fa-arrow-left"></i> <span>Prev</span>
+              </button>
+            </div>
+
+            <button id="flash-flip-btn" class="btn-flash-action btn-flash-flip" title="Flip Card to Reveal Answer (Spacebar)">
+              <i class="fas fa-rotate"></i> <span>Flip / Reveal Answer</span>
             </button>
-            <button id="flash-flip-btn" class="btn-flash-ctrl" style="background: var(--accent-gold); color: #000;" title="Flip Card (Spacebar)">
-              <i class="fas fa-rotate"></i> Flip
-            </button>
-            <button id="flash-next-btn" class="btn-flash-ctrl" title="Next Flashcard (Right Arrow)">
-              Next <i class="fas fa-arrow-right"></i>
-            </button>
-            <button id="flash-shuffle-btn" class="btn-flash-ctrl" title="Shuffle Deck">
-              <i class="fas fa-shuffle"></i>
-            </button>
+
+            <div class="flashcard-nav-group">
+              <button id="flash-next-btn" class="btn-flash-action" title="Next Card (Right Arrow)">
+                <span>Next</span> <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.8rem;">
+            <i class="fas fa-keyboard" style="margin-right: 0.35rem;"></i> <strong>Keyboard Shortcuts:</strong> Spacebar to Flip • Arrow Left/Right to Navigate
           </div>
         </div>
       </section>
@@ -370,7 +415,7 @@
 
           <div class="footer-version-tag">
             <i class="fas fa-code-branch text-emerald"></i>
-            <span>v1.0.2 (updated 2026-08-24 01:50)</span>
+            <span>v1.0.3 (updated 2026-08-24 01:56)</span>
           </div>
         </div>
 

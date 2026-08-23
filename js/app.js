@@ -62,12 +62,16 @@
     questionsContainer: document.getElementById('questions-container'),
     exportJournalBtn: document.getElementById('export-journal-btn'),
     
-    // Flashcards
+        // Flashcards Studio
     flashcardWrapper: document.getElementById('flashcard-wrapper'),
     flashcardFront: document.getElementById('flashcard-front'),
     flashcardBack: document.getElementById('flashcard-back'),
     flashcardCurrentNum: document.getElementById('flashcard-current-num'),
     flashcardTotalNum: document.getElementById('flashcard-total-num'),
+    flashcardMasteredCount: document.getElementById('flashcard-mastered-count'),
+    flashcardProgressBar: document.getElementById('flashcard-progress-bar'),
+    flashCategorySelect: document.getElementById('flash-category-select'),
+    btnMarkMastered: document.getElementById('btn-mark-mastered'),
     flashPrevBtn: document.getElementById('flash-prev-btn'),
     flashNextBtn: document.getElementById('flash-next-btn'),
     flashFlipBtn: document.getElementById('flash-flip-btn'),
@@ -144,6 +148,9 @@
     });
 
     state.activeTab = targetTab;
+    if (targetTab === 'flashcards') {
+      renderCurrentFlashcard();
+    }
     
     // Smooth scroll to search hub or top of tab
     const searchHub = document.querySelector('.search-filter-section');
@@ -607,88 +614,190 @@
     showToast('Reflection Journal exported successfully!');
   }
 
+    // =========================================================================
+  // FLASHCARDS STUDY ENGINE (ADVANCED)
   // =========================================================================
-  // FLASHCARDS STUDY ENGINE
-  // =========================================================================
+  state.flashcardCategory = 'all';
+  state.masteredCards = JSON.parse(localStorage.getItem('100top_mastered_cards') || '[]');
+  state.flashcardDeck = [];
+
   function initFlashcards() {
     if (!window.APP_DATA || !window.APP_DATA.items) return;
-    state.shuffledFlashcards = [...window.APP_DATA.items];
+    updateFlashcardDeck();
+  }
+
+  function updateFlashcardDeck() {
+    if (!window.APP_DATA || !window.APP_DATA.items) return;
+    
+    if (state.flashcardCategory === 'all') {
+      state.flashcardDeck = [...window.APP_DATA.items];
+    } else {
+      state.flashcardDeck = window.APP_DATA.items.filter(i => i.category === state.flashcardCategory);
+    }
+
     state.activeFlashcardIndex = 0;
     renderCurrentFlashcard();
   }
 
   function renderCurrentFlashcard() {
-    if (!dom.flashcardWrapper || state.shuffledFlashcards.length === 0) return;
-    const item = state.shuffledFlashcards[state.activeFlashcardIndex];
+    if (!dom.flashcardWrapper || state.flashcardDeck.length === 0) return;
+    const item = state.flashcardDeck[state.activeFlashcardIndex];
     if (!item) return;
 
+    // Reset rotation state to front
     dom.flashcardWrapper.classList.remove('flipped');
 
-    if (dom.flashcardCurrentNum) dom.flashcardCurrentNum.textContent = state.activeFlashcardIndex + 1;
-    if (dom.flashcardTotalNum) dom.flashcardTotalNum.textContent = state.shuffledFlashcards.length;
+    const total = state.flashcardDeck.length;
+    const current = state.activeFlashcardIndex + 1;
+    const isMastered = state.masteredCards.includes(item.id);
 
-    // Front Side
+    // Update numbers and progress bar
+    if (dom.flashcardCurrentNum) dom.flashcardCurrentNum.textContent = current;
+    if (dom.flashcardTotalNum) dom.flashcardTotalNum.textContent = total;
+    if (dom.flashcardProgressBar) {
+      dom.flashcardProgressBar.style.width = `${(current / total) * 100}%`;
+    }
+    if (dom.flashcardMasteredCount) {
+      dom.flashcardMasteredCount.textContent = `• ${state.masteredCards.length} Mastered`;
+    }
+
+    // Update Mastered Button State
+    if (dom.btnMarkMastered) {
+      if (isMastered) {
+        dom.btnMarkMastered.classList.add('mastered');
+        dom.btnMarkMastered.innerHTML = '<i class="fas fa-check-double"></i> Mastered';
+      } else {
+        dom.btnMarkMastered.classList.remove('mastered');
+        dom.btnMarkMastered.innerHTML = '<i class="fas fa-check"></i> Mark Mastered';
+      }
+    }
+
+    const isCurrentlyPlaying = state.currentVerse && state.currentVerse.itemId === item.id && state.isPlaying;
+
+    // Front Side (Question / Arabic Calligraphy & Root)
     dom.flashcardFront.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="card-id-badge">Flashcard #${item.id}</span>
-        <span class="card-category-tag">${item.category}</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="card-id-badge" style="font-size: 0.85rem;">Card #${String(item.id).padStart(3, '0')}</span>
+        <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+        ${isMastered ? '<span style="font-size: 0.75rem; color: var(--accent-emerald-bright); font-weight: 800; background: rgba(16,185,129,0.15); padding: 0.2rem 0.6rem; border-radius: var(--radius-full);"><i class="fas fa-check"></i> Mastered</span>' : ''}
       </div>
-      <div style="text-align: center; margin: 2rem 0;">
-        <div class="font-arabic" style="font-size: 2.8rem; color: var(--text-arabic); line-height: 1.4; margin-bottom: 1rem;">${item.arabic}</div>
-        <div class="card-root-box" style="font-size: 1rem;">Root: ${item.root}</div>
-      </div>
-      <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">
-        <i class="fas fa-hand-pointer" style="margin-right: 0.35rem;"></i> Click / Press Space to Flip Card
-      </div>
-    `;
 
-    // Back Side
-    dom.flashcardBack.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="card-id-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald-bright);">Answer Reveal</span>
-        <span style="font-size: 0.8rem; color: var(--accent-gold-bright); font-weight: 700;">${item.category}</span>
-      </div>
-      <div style="margin: 1.5rem 0;">
-        <h3 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">${item.title}</h3>
-        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">${item.summary}</p>
-        
-        <div class="card-verse-box" style="padding: 0.75rem 1rem;">
-          <div class="card-verse-ref" style="font-size: 0.8rem;">Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})</div>
-          <div class="card-verse-arabic font-arabic" style="font-size: 1.1rem; line-height: 1.4;">${item.verse.textArabic}</div>
+      <div style="text-align: center; margin: auto 0; padding: 1.5rem 0;">
+        <div style="font-size: 0.85rem; color: var(--accent-gold-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;">
+          What is the meaning and Quranic significance of:
+        </div>
+        <div class="font-arabic" style="font-size: 3.2rem; color: var(--text-arabic); line-height: 1.3; margin-bottom: 1rem;">
+          ${item.arabic}
+        </div>
+        <div class="card-root-box" style="font-size: 1.05rem; padding: 0.4rem 1rem;">
+          Linguistic Root: <strong>${item.root}</strong>
         </div>
       </div>
-      <div style="font-size: 0.85rem; color: var(--accent-emerald-bright); line-height: 1.5;">
-        <strong>Action:</strong> ${item.practicalTakeaway}
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+        <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" title="Recite verse audio" style="padding: 0.4rem 0.9rem;">
+          <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite Ayah</span>
+        </button>
+
+        <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+          <i class="fas fa-hand-pointer text-gold"></i> Click card or press Space to Flip
+        </div>
       </div>
     `;
+
+    // Back Side (Answer / English Title, Meaning, Verse & Practical Takeaway)
+    dom.flashcardBack.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="card-id-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald-bright); font-size: 0.85rem;">
+          <i class="fas fa-lightbulb"></i> Answer & Reflection
+        </span>
+        <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+      </div>
+
+      <div style="margin: auto 0; padding: 0.75rem 0;">
+        <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+          <h3 style="font-family: var(--font-display); font-size: 1.45rem; font-weight: 800; color: #fff;">${item.title}</h3>
+          <span class="font-arabic" style="font-size: 1.3rem; color: var(--accent-gold-bright);">${item.arabic}</span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.85rem;">${item.summary}</p>
+        
+        <div class="card-verse-box" style="padding: 0.75rem 1rem; margin-bottom: 0.85rem;">
+          <div class="card-verse-header" style="margin-bottom: 0.35rem;">
+            <span class="card-verse-ref" style="font-size: 0.75rem;">Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})</span>
+            <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" style="padding: 0.2rem 0.6rem; font-size: 0.7rem;">
+              <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite</span>
+            </button>
+          </div>
+          <div class="card-verse-arabic font-arabic" style="font-size: 1.05rem; line-height: 1.5;">${item.verse.textArabic}</div>
+          <div class="card-verse-english" style="font-size: 0.78rem;">"${item.verse.textEnglish}"</div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--accent-emerald-bright); line-height: 1.5; background: rgba(16,185,129,0.08); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border-left: 2px solid var(--accent-emerald);">
+          <strong>2026 Action:</strong> ${item.practicalTakeaway}
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle);">
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Root: ${item.root}</span>
+        <span style="color: var(--accent-gold-bright); font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+          Click to Flip Back <i class="fas fa-rotate" style="margin-left: 0.25rem;"></i>
+        </span>
+      </div>
+    `;
+  }
+
+  function toggleFlashcardFlip() {
+    if (!dom.flashcardWrapper) return;
+    dom.flashcardWrapper.classList.toggle('flipped');
   }
 
   function nextFlashcard() {
-    if (state.activeFlashcardIndex < state.shuffledFlashcards.length - 1) {
+    if (state.flashcardDeck.length === 0) return;
+    if (state.activeFlashcardIndex < state.flashcardDeck.length - 1) {
       state.activeFlashcardIndex++;
-      renderCurrentFlashcard();
     } else {
       state.activeFlashcardIndex = 0;
-      renderCurrentFlashcard();
-      showToast('Completed deck! Restarting from card 1.');
+      showToast('Completed deck! Restarting from Card 1.');
     }
+    renderCurrentFlashcard();
   }
 
   function prevFlashcard() {
+    if (state.flashcardDeck.length === 0) return;
     if (state.activeFlashcardIndex > 0) {
       state.activeFlashcardIndex--;
-      renderCurrentFlashcard();
+    } else {
+      state.activeFlashcardIndex = state.flashcardDeck.length - 1;
     }
+    renderCurrentFlashcard();
   }
 
   function shuffleFlashcards() {
-    for (let i = state.shuffledFlashcards.length - 1; i > 0; i--) {
+    for (let i = state.flashcardDeck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [state.shuffledFlashcards[i], state.shuffledFlashcards[j]] = [state.shuffledFlashcards[j], state.shuffledFlashcards[i]];
+      [state.flashcardDeck[i], state.flashcardDeck[j]] = [state.flashcardDeck[j], state.flashcardDeck[i]];
     }
     state.activeFlashcardIndex = 0;
     renderCurrentFlashcard();
-    showToast('Flashcards shuffled!');
+    showToast(`Shuffled ${state.flashcardDeck.length} flashcards!`);
+  }
+
+  function toggleMasteryCurrentCard() {
+    if (state.flashcardDeck.length === 0) return;
+    const item = state.flashcardDeck[state.activeFlashcardIndex];
+    if (!item) return;
+
+    const idx = state.masteredCards.indexOf(item.id);
+    if (idx === -1) {
+      state.masteredCards.push(item.id);
+      showToast(`Marked Dimension #${item.id} as Mastered! 🎉`);
+    } else {
+      state.masteredCards.splice(idx, 1);
+      showToast(`Unmarked Dimension #${item.id} from Mastered.`);
+    }
+
+    localStorage.setItem('100top_mastered_cards', JSON.stringify(state.masteredCards));
+    renderCurrentFlashcard();
   }
 
   // =========================================================================
@@ -1196,20 +1305,59 @@
       dom.exportJournalBtn.addEventListener('click', exportJournal);
     }
 
-    // Flashcard Controls
+        // Flashcard Studio Controls
     if (dom.flashcardWrapper) {
-      dom.flashcardWrapper.addEventListener('click', () => {
-        dom.flashcardWrapper.classList.toggle('flipped');
+      dom.flashcardWrapper.addEventListener('click', (e) => {
+        const playBtn = e.target.closest('.btn-play-verse');
+        if (playBtn) {
+          e.stopPropagation();
+          const itemId = Number(playBtn.getAttribute('data-item-id'));
+          const item = window.APP_DATA.items.find(i => i.id === itemId);
+          if (item) {
+            if (state.currentVerse && state.currentVerse.itemId === itemId && state.isPlaying) {
+              state.audio.pause();
+            } else {
+              playVerse({
+                itemId: item.id,
+                surah: item.verse.surah,
+                ayah: item.verse.ayah,
+                surahName: item.verse.surahName,
+                textArabic: item.verse.textArabic,
+                audioUrl: item.verse.audioUrl
+              });
+            }
+          }
+          return;
+        }
+        toggleFlashcardFlip();
       });
     }
+
     if (dom.flashFlipBtn) {
-      dom.flashFlipBtn.addEventListener('click', () => {
-        dom.flashcardWrapper.classList.toggle('flipped');
+      dom.flashFlipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFlashcardFlip();
       });
     }
+
     if (dom.flashNextBtn) dom.flashNextBtn.addEventListener('click', nextFlashcard);
     if (dom.flashPrevBtn) dom.flashPrevBtn.addEventListener('click', prevFlashcard);
     if (dom.flashShuffleBtn) dom.flashShuffleBtn.addEventListener('click', shuffleFlashcards);
+
+    if (dom.btnMarkMastered) {
+      dom.btnMarkMastered.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMasteryCurrentCard();
+      });
+    }
+
+    if (dom.flashCategorySelect) {
+      dom.flashCategorySelect.addEventListener('change', (e) => {
+        state.flashcardCategory = e.target.value;
+        updateFlashcardDeck();
+        showToast(`Deck switched to: ${e.target.options[e.target.selectedIndex].text}`);
+      });
+    }
 
     // Quotes Carousel Controls
     if (dom.quoteNextBtn) dom.quoteNextBtn.addEventListener('click', nextQuote);

@@ -3,8 +3,8 @@
  * Comprehensive structured data for 200 Core Dimensions, Audio, Top 20 Reservations & Inquiries
  */
 const APP_DATA = {
-  "version": "v1.0.2",
-  "updated": "2026-08-24 01:50",
+  "version": "v1.0.3",
+  "updated": "2026-08-24 01:56",
   "appName": "100Top Islam & Quran: The Living Matrix (2026 Edition)",
   "subtitle": "200 Foundational Dimensions, Linguistic Gems, Quran Audio Recitations, Top 20 Reservations & Philosophical Inquiries",
   "categories": [
