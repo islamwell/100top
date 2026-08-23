@@ -37,8 +37,8 @@
           </div>
         </a>
 
-        <!-- Desktop Navigation Tabs -->
-        <nav>
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs-wrapper">
           <ul class="nav-tabs">
             <li>
               <button class="nav-tab-btn active" data-tab="concepts">
@@ -91,21 +91,21 @@
         An immersive exploration across Arabic grammar, Quranic recitation audio, theology, spiritual purification, Islamic civilization, cosmology, rational defenses against misconceptions, and transformative reflections.
       </p>
 
-      <!-- Metrics Grid -->
+      <!-- Interactive Metrics Grid -->
       <div class="hero-stats-grid">
-        <div class="stat-chip">
+        <div class="stat-chip" data-target-tab="concepts" style="cursor: pointer;" title="Browse all 200 Dimensions">
           <div class="stat-number">200</div>
           <div class="stat-label">Core Dimensions</div>
         </div>
-        <div class="stat-chip">
+        <div class="stat-chip" data-target-tab="concepts" style="cursor: pointer;" title="Explore 10 Knowledge Domains">
           <div class="stat-number">10</div>
           <div class="stat-label">Knowledge Domains</div>
         </div>
-        <div class="stat-chip">
+        <div class="stat-chip" data-target-tab="reservations" style="cursor: pointer;" title="Read Top 20 Counter-Arguments">
           <div class="stat-number">20</div>
           <div class="stat-label">Reservations Answered</div>
         </div>
-        <div class="stat-chip">
+        <div class="stat-chip" data-target-tab="audio" style="cursor: pointer;" title="Play / Pause Quran Audio">
           <div class="stat-number">6,236</div>
           <div class="stat-label">Verses Stream Ready</div>
         </div>
@@ -370,7 +370,7 @@
 
           <div class="footer-version-tag">
             <i class="fas fa-code-branch text-emerald"></i>
-            <span>v1.0.1 (updated 2026-08-24 01:27)</span>
+            <span>v1.0.2 (updated 2026-08-24 01:50)</span>
           </div>
         </div>
 
@@ -379,10 +379,10 @@
             &copy; 2026 100Top Islam & Quran. Open-source educational initiative. Built for humanity.
           </div>
           <ul class="footer-links">
-            <li><a href="#tab-concepts">200 Dimensions</a></li>
-            <li><a href="#tab-reservations">Top 20 Reservations</a></li>
-            <li><a href="#tab-questions">Reflections & Journal</a></li>
-            <li><a href="#tab-flashcards">Flashcard Hub</a></li>
+            <li><a href="#tab-concepts" class="footer-tab-link" data-tab="concepts">200 Dimensions</a></li>
+            <li><a href="#tab-reservations" class="footer-tab-link" data-tab="reservations">Top 20 Reservations</a></li>
+            <li><a href="#tab-questions" class="footer-tab-link" data-tab="questions">Reflections & Journal</a></li>
+            <li><a href="#tab-flashcards" class="footer-tab-link" data-tab="flashcards">Flashcard Hub</a></li>
           </ul>
         </div>
       </div>

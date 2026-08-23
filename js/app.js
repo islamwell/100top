@@ -1,7 +1,7 @@
 /**
- * 100Top Islam & Quran (2026 Edition) - Master Application Engine
+ * 100Top Islam & Quran (2026 Edition) - Master Application Engine (v1.0.2)
  * Interactive Search, Quran Audio Player, Deep-Dive Modals, Flashcards,
- * Top 20 Reservations Explorer & Reflective Journaling System.
+ * Top 20 Reservations Explorer, Reflective Journaling & Comprehensive Button Handlers.
  */
 
 (function() {
@@ -13,6 +13,7 @@
     selectedCategory: 'all',
     searchQuery: '',
     viewMode: 'grid', // 'grid' | 'list'
+    onlyBookmarks: false,
     bookmarks: JSON.parse(localStorage.getItem('100top_bookmarks') || '[]'),
     journalNotes: JSON.parse(localStorage.getItem('100top_journal') || '{}'),
     activeFlashcardIndex: 0,
@@ -37,6 +38,8 @@
     navTabs: document.querySelectorAll('.nav-tab-btn'),
     tabPanes: document.querySelectorAll('.tab-pane'),
     themeToggle: document.getElementById('theme-toggle-btn'),
+    footerLinks: document.querySelectorAll('.footer-tab-link'),
+    statChips: document.querySelectorAll('.stat-chip[data-target-tab]'),
     
     // Search & Filter
     searchInput: document.getElementById('search-input'),
@@ -113,6 +116,47 @@
     renderQuote();
     initAudioEngine();
     bindEvents();
+    checkUrlHash();
+  }
+
+  // =========================================================================
+  // TAB SWITCHER CONTROLLER
+  // =========================================================================
+  function switchTab(targetTab) {
+    if (!targetTab) return;
+    
+    // Update nav tab buttons
+    dom.navTabs.forEach(btn => {
+      if (btn.getAttribute('data-tab') === targetTab) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Update tab panes
+    dom.tabPanes.forEach(pane => {
+      if (pane.id === `tab-${targetTab}`) {
+        pane.classList.add('active');
+      } else {
+        pane.classList.remove('active');
+      }
+    });
+
+    state.activeTab = targetTab;
+    
+    // Smooth scroll to search hub or top of tab
+    const searchHub = document.querySelector('.search-filter-section');
+    if (searchHub && window.scrollY > 300) {
+      searchHub.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function checkUrlHash() {
+    const hash = window.location.hash.replace('#', '').replace('tab-', '');
+    if (['concepts', 'reservations', 'questions', 'flashcards'].includes(hash)) {
+      switchTab(hash);
+    }
   }
 
   // =========================================================================
@@ -127,10 +171,13 @@
       const icon = dom.themeToggle.querySelector('i') || dom.themeToggle;
       if (theme === 'midnight') {
         icon.className = 'fas fa-moon';
+        dom.themeToggle.setAttribute('title', 'Theme: Midnight OLED (Click to switch)');
       } else if (theme === 'light') {
         icon.className = 'fas fa-sun';
+        dom.themeToggle.setAttribute('title', 'Theme: Light Sand (Click to switch)');
       } else {
         icon.className = 'fas fa-gem';
+        dom.themeToggle.setAttribute('title', 'Theme: Emerald Luxury (Click to switch)');
       }
     }
   }
@@ -188,7 +235,6 @@
         ctx.fillStyle = p.color + '0.6)';
         ctx.fill();
 
-        // Connect nearby particles to form subtle geometric constellations
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -273,7 +319,11 @@
     const items = getFilteredItems();
 
     if (dom.resultsCount) {
-      dom.resultsCount.textContent = `${items.length} of 200 Dimensions`;
+      if (state.onlyBookmarks) {
+        dom.resultsCount.textContent = `${items.length} Bookmarked Dimensions`;
+      } else {
+        dom.resultsCount.textContent = `${items.length} of 200 Dimensions`;
+      }
     }
 
     if (items.length === 0) {
@@ -433,7 +483,7 @@
       );
     }
 
-    dom.reservationsContainer.innerHTML = reservations.map((res, index) => {
+    dom.reservationsContainer.innerHTML = reservations.map((res) => {
       return `
         <div class="reservation-card" data-id="${res.id}">
           <div class="reservation-header" data-id="${res.id}">
@@ -537,25 +587,14 @@
 
   function exportJournal() {
     if (!window.APP_DATA) return;
-    let exportText = `# 100Top Islam & Quran - My Personal Reflection Journal
-`;
-    exportText += `Exported on: ${new Date().toLocaleString()}
-
-`;
+    let exportText = `# 100Top Islam & Quran - My Personal Reflection Journal\n`;
+    exportText += `Exported on: ${new Date().toLocaleString()}\n\n`;
 
     window.APP_DATA.questions.forEach((q, i) => {
       const note = state.journalNotes[q.id] || 'No notes written yet.';
-      exportText += `## ${i + 1}. ${q.title}
-`;
-      exportText += `**Question:** ${q.question}
-
-`;
-      exportText += `**My Reflections:**
-${note}
-
----
-
-`;
+      exportText += `## ${i + 1}. ${q.title}\n`;
+      exportText += `**Question:** ${q.question}\n\n`;
+      exportText += `**My Reflections:**\n${note}\n\n---\n\n`;
     });
 
     const blob = new Blob([exportText], { type: 'text/markdown' });
@@ -628,6 +667,10 @@ ${note}
     if (state.activeFlashcardIndex < state.shuffledFlashcards.length - 1) {
       state.activeFlashcardIndex++;
       renderCurrentFlashcard();
+    } else {
+      state.activeFlashcardIndex = 0;
+      renderCurrentFlashcard();
+      showToast('Completed deck! Restarting from card 1.');
     }
   }
 
@@ -710,16 +753,19 @@ ${note}
     state.currentVerse = verseData;
     state.audio.src = verseData.audioUrl;
     state.audio.playbackRate = state.playbackRate;
-    state.audio.play().catch(err => {
-      console.warn('Audio playback error:', err);
-    });
+    const playPromise = state.audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.warn('Audio playback error / user interaction required:', err);
+      });
+    }
 
     if (dom.audioPlayerBar) {
       dom.audioPlayerBar.classList.remove('minimized');
     }
 
     if (dom.audioSurahName) dom.audioSurahName.textContent = `Surah ${verseData.surahName}`;
-    if (dom.audioVerseRef) dom.audioVerseRef.textContent = `Verse (${verseData.surah}:${verseData.ayah})`;
+    if (dom.audioVerseRef) dom.audioVerseRef.textContent = `Verse (${verseData.surah}:${verseData.ayah}) • Sheikh Mishary Alafasy`;
     if (dom.audioArabicSnippet) dom.audioArabicSnippet.textContent = verseData.textArabic;
 
     updateAudioUI();
@@ -745,40 +791,48 @@ ${note}
     if (state.isPlaying) {
       state.audio.pause();
     } else {
-      state.audio.play();
+      state.audio.play().catch(err => console.warn('Audio play error:', err));
     }
   }
 
   function playNextTrack() {
-    if (!state.currentVerse || !window.APP_DATA) return;
-    const currentIndex = window.APP_DATA.items.findIndex(i => i.id === state.currentVerse.itemId);
-    if (currentIndex !== -1 && currentIndex < window.APP_DATA.items.length - 1) {
-      const nextItem = window.APP_DATA.items[currentIndex + 1];
-      playVerse({
-        itemId: nextItem.id,
-        surah: nextItem.verse.surah,
-        ayah: nextItem.verse.ayah,
-        surahName: nextItem.verse.surahName,
-        textArabic: nextItem.verse.textArabic,
-        audioUrl: nextItem.verse.audioUrl
-      });
+    if (!window.APP_DATA || !window.APP_DATA.items.length) return;
+    let currentIndex = 0;
+    if (state.currentVerse && typeof state.currentVerse.itemId === 'number') {
+      const idx = window.APP_DATA.items.findIndex(i => i.id === state.currentVerse.itemId);
+      if (idx !== -1) currentIndex = idx + 1;
     }
+    if (currentIndex >= window.APP_DATA.items.length) currentIndex = 0;
+
+    const nextItem = window.APP_DATA.items[currentIndex];
+    playVerse({
+      itemId: nextItem.id,
+      surah: nextItem.verse.surah,
+      ayah: nextItem.verse.ayah,
+      surahName: nextItem.verse.surahName,
+      textArabic: nextItem.verse.textArabic,
+      audioUrl: nextItem.verse.audioUrl
+    });
   }
 
   function playPrevTrack() {
-    if (!state.currentVerse || !window.APP_DATA) return;
-    const currentIndex = window.APP_DATA.items.findIndex(i => i.id === state.currentVerse.itemId);
-    if (currentIndex > 0) {
-      const prevItem = window.APP_DATA.items[currentIndex - 1];
-      playVerse({
-        itemId: prevItem.id,
-        surah: prevItem.verse.surah,
-        ayah: prevItem.verse.ayah,
-        surahName: prevItem.verse.surahName,
-        textArabic: prevItem.verse.textArabic,
-        audioUrl: prevItem.verse.audioUrl
-      });
+    if (!window.APP_DATA || !window.APP_DATA.items.length) return;
+    let currentIndex = 0;
+    if (state.currentVerse && typeof state.currentVerse.itemId === 'number') {
+      const idx = window.APP_DATA.items.findIndex(i => i.id === state.currentVerse.itemId);
+      if (idx > 0) currentIndex = idx - 1;
+      else currentIndex = window.APP_DATA.items.length - 1;
     }
+
+    const prevItem = window.APP_DATA.items[currentIndex];
+    playVerse({
+      itemId: prevItem.id,
+      surah: prevItem.verse.surah,
+      ayah: prevItem.verse.ayah,
+      surahName: prevItem.verse.surahName,
+      textArabic: prevItem.verse.textArabic,
+      audioUrl: prevItem.verse.audioUrl
+    });
   }
 
   function updateAudioUI() {
@@ -847,6 +901,38 @@ ${note}
   }
 
   // =========================================================================
+  // COPY CLIPBOARD HELPER (WITH FALLBACK)
+  // =========================================================================
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Wisdom Gem copied to clipboard!');
+      }).catch(() => {
+        fallbackCopyText(text);
+      });
+    } else {
+      fallbackCopyText(text);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showToast('Wisdom Gem copied to clipboard!');
+    } catch (err) {
+      showToast('Could not copy to clipboard');
+    }
+    document.body.removeChild(textArea);
+  }
+
+  // =========================================================================
   // EVENT BINDINGS
   // =========================================================================
   function bindEvents() {
@@ -854,19 +940,29 @@ ${note}
     dom.navTabs.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetTab = btn.getAttribute('data-tab');
-        dom.navTabs.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        switchTab(targetTab);
+      });
+    });
 
-        dom.tabPanes.forEach(pane => {
-          if (pane.id === `tab-${targetTab}`) {
-            pane.classList.add('active');
-          } else {
-            pane.classList.remove('active');
-          }
-        });
-
-        state.activeTab = targetTab;
+    // Footer Navigation Links
+    dom.footerLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetTab = link.getAttribute('data-tab');
+        switchTab(targetTab);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Hero Stat Chips (Clickable shortcuts)
+    dom.statChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const targetTab = chip.getAttribute('data-target-tab');
+        if (targetTab === 'audio') {
+          togglePlayPause();
+        } else if (targetTab) {
+          switchTab(targetTab);
+        }
       });
     });
 
@@ -1019,9 +1115,7 @@ ${note}
         const copyBtn = e.target.closest('.btn-copy-quote');
         if (copyBtn) {
           const text = copyBtn.getAttribute('data-quote');
-          navigator.clipboard.writeText(text).then(() => {
-            showToast('Wisdom Gem copied to clipboard!');
-          });
+          copyTextToClipboard(text);
         }
       });
     }
@@ -1172,6 +1266,9 @@ ${note}
         }
       }
     });
+
+    // Hash change listener
+    window.addEventListener('hashchange', checkUrlHash);
   }
 
   // Run upon DOM ready
