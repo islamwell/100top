@@ -2,7 +2,7 @@
 
 An encyclopedic, next-generation 2026 interactive web application showcasing the **Top 200 Fundamental & Profound Dimensions of Islam and the Quran**, featuring real-time Arabic linguistic analysis, instant high-fidelity Quranic audio recitation, deep rational counter-arguments to the Top 20 reservations against Islam, and a private reflective journaling engine.
 
-![Version](https://img.shields.io/badge/version-1.0.0-gold.svg)
+![Version](https://img.shields.io/badge/version-1.0.1-gold.svg)
 ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
 ![Platform](https://img.shields.io/badge/platform-Cloudflare%20Pages%20%7C%20GitHub-blue.svg)
 
@@ -58,7 +58,7 @@ An encyclopedic, next-generation 2026 interactive web application showcasing the
 - Luxury Emerald & Gold Glassmorphism design with Dark Emerald, Midnight OLED, and Warm Light Sand themes.
 - Canvas sacred geometry particle constellation animation.
 - Instant search and category filter pills with live counters.
-- Footer semantic versioning: `v1.0.0 (updated 2026-08-24 01:17)`.
+- Footer semantic versioning: `v1.0.1 (updated 2026-08-24 01:27)`.
 
 ---
 
