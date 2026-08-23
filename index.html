@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Top 200 Things Related to Islam and Quran: The Living Matrix (2026 Edition). An interactive encyclopedia of Arabic linguistics, Quranic audio, theology, worship, sciences, top 20 reservations & rational reflections.">
+  <title>100Top Islam & Quran • The Living Matrix (2026 Edition)</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans, Outfit, Amiri, Scheherazade New -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Pro CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Sacred Geometry Particle Canvas Background -->
+  <canvas id="canvas-bg"></canvas>
+
+  <div class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-content">
+        <a href="#" class="brand-logo">
+          <div class="brand-icon">
+            <i class="fas fa-kaaba"></i>
+          </div>
+          <div>
+            <span class="gradient-text-gold">100Top</span><span style="color: #fff;">Islam</span>
+            <span class="brand-badge">2026 Pro</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav>
+          <ul class="nav-tabs">
+            <li>
+              <button class="nav-tab-btn active" data-tab="concepts">
+                <i class="fas fa-sparkles text-gold"></i>
+                <span>200 Dimensions</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-tab-btn" data-tab="reservations">
+                <i class="fas fa-shield-halved text-emerald"></i>
+                <span>Top 20 Reservations</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-tab-btn" data-tab="questions">
+                <i class="fas fa-pen-nib text-gold"></i>
+                <span>Inquiries & Journal</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-tab-btn" data-tab="flashcards">
+                <i class="fas fa-layer-group text-emerald"></i>
+                <span>Flashcards</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Navigation Actions -->
+        <div class="nav-actions">
+          <button id="theme-toggle-btn" class="btn-icon" title="Toggle Theme (Emerald / Midnight / Sand)">
+            <i class="fas fa-gem"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Showcase Section -->
+    <section class="hero-section">
+      <div class="hero-pill">
+        <i class="fas fa-star-and-crescent"></i>
+        <span>The Living Encyclopedic Matrix • 2026 Next-Gen Edition</span>
+      </div>
+
+      <h1 class="hero-title">
+        The Top <span class="gradient-text-gold">200 Dimensions</span> of <span class="gradient-text-emerald">Islam & The Quran</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        An immersive exploration across Arabic grammar, Quranic recitation audio, theology, spiritual purification, Islamic civilization, cosmology, rational defenses against misconceptions, and transformative reflections.
+      </p>
+
+      <!-- Metrics Grid -->
+      <div class="hero-stats-grid">
+        <div class="stat-chip">
+          <div class="stat-number">200</div>
+          <div class="stat-label">Core Dimensions</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-number">10</div>
+          <div class="stat-label">Knowledge Domains</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-number">20</div>
+          <div class="stat-label">Reservations Answered</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-number">6,236</div>
+          <div class="stat-label">Verses Stream Ready</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Hub -->
+    <section class="search-filter-section">
+      <div class="search-filter-container">
+        
+        <!-- Search Bar & View Toggles -->
+        <div class="search-row">
+          <div class="search-input-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-input" class="search-input" placeholder="Search 200 dimensions, roots (e.g. S-L-M), Arabic, Surahs, concepts..." autocomplete="off">
+            <button id="search-clear-btn" class="search-clear-btn" title="Clear Search">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="filter-actions">
+            <button id="filter-bookmarks-btn" class="btn-filter-toggle" title="View Bookmarked Items">
+              <i class="far fa-bookmark"></i>
+              <span>Saved</span>
+            </button>
+
+            <div class="view-options">
+              <button id="view-grid-btn" class="view-btn active" title="3D Grid View">
+                <i class="fas fa-grip"></i> Grid
+              </button>
+              <button id="view-list-btn" class="view-btn" title="Compact List View">
+                <i class="fas fa-list"></i> List
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Pills Scroller -->
+        <div class="categories-scroll" id="categories-container">
+          <!-- Populated by app.js -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- TAB 1: 200 Concepts Explorer -->
+      <section id="tab-concepts" class="tab-pane active">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">
+              <i class="fas fa-compass text-gold"></i> Encyclopedic Catalog
+            </h2>
+            <div id="results-count" class="section-subtitle">Showing 200 of 200 Dimensions</div>
+          </div>
+        </div>
+
+        <!-- Cards Grid Container -->
+        <div id="cards-container" class="cards-grid">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" style="display: none; text-align: center; padding: 4rem 1.5rem;">
+          <div style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">No Matching Dimensions Found</h3>
+          <p style="color: var(--text-muted); max-width: 450px; margin: 0 auto 1.5rem;">Try adjusting your keyword search, clearing category filters, or browsing all 200 items.</p>
+        </div>
+      </section>
+
+      <!-- TAB 2: Top 20 Reservations & Debates -->
+      <section id="tab-reservations" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">
+              <i class="fas fa-shield-halved text-emerald"></i> Top 20 Reservations Against Islam & Counter-Arguments
+            </h2>
+            <p class="section-subtitle">Rigorous, intellectual, compassionate, and evidence-based rebuttals to the most common philosophical, theological, and societal questions.</p>
+          </div>
+        </div>
+
+        <div style="max-width: 700px; margin: 0 auto 2rem;">
+          <div class="search-input-wrapper">
+            <i class="fas fa-filter search-icon"></i>
+            <input type="text" id="reservation-search" class="search-input" placeholder="Search reservations (e.g. suffering, science, women, free will, warfare)...">
+          </div>
+        </div>
+
+        <!-- Reservations Accordion Container -->
+        <div id="reservations-container" class="reservations-container">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 3: Reflective Inquiries & Personal Journal -->
+      <section id="tab-questions" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">
+              <i class="fas fa-pen-nib text-gold"></i> Reflective Inquiries & Personal Journal
+            </h2>
+            <p class="section-subtitle">Deep philosophical and spiritual introspection questions designed to awaken consciousness. Your personal journal notes are securely saved on your device.</p>
+          </div>
+          <button id="export-journal-btn" class="btn-filter-toggle active" style="padding: 0.6rem 1.2rem;">
+            <i class="fas fa-download"></i> Export My Journal (.md)
+          </button>
+        </div>
+
+        <!-- Questions Grid Container -->
+        <div id="questions-container" class="questions-container">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 4: Study Flashcards -->
+      <section id="tab-flashcards" class="tab-pane">
+        <div class="section-header" style="justify-content: center; text-align: center;">
+          <div>
+            <h2 class="section-title" style="justify-content: center;">
+              <i class="fas fa-layer-group text-emerald"></i> Active Recall Flashcard Hub
+            </h2>
+            <p class="section-subtitle">Test and consolidate your knowledge of the 200 dimensions, Arabic roots, and Quranic wisdom.</p>
+          </div>
+        </div>
+
+        <div class="flashcards-container">
+          <div id="flashcard-wrapper" class="flashcard-wrapper">
+            <div id="flashcard-front" class="flashcard-face flashcard-front">
+              <!-- Rendered by app.js -->
+            </div>
+            <div id="flashcard-back" class="flashcard-face flashcard-back">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 1.25rem; font-weight: 700; color: var(--accent-gold-bright); font-family: monospace;">
+            Card <span id="flashcard-current-num">1</span> of <span id="flashcard-total-num">200</span>
+          </div>
+
+          <div class="flashcard-controls">
+            <button id="flash-prev-btn" class="btn-flash-ctrl" title="Previous Flashcard (Left Arrow)">
+              <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button id="flash-flip-btn" class="btn-flash-ctrl" style="background: var(--accent-gold); color: #000;" title="Flip Card (Spacebar)">
+              <i class="fas fa-rotate"></i> Flip
+            </button>
+            <button id="flash-next-btn" class="btn-flash-ctrl" title="Next Flashcard (Right Arrow)">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button id="flash-shuffle-btn" class="btn-flash-ctrl" title="Shuffle Deck">
+              <i class="fas fa-shuffle"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quotes Carousel Showcase -->
+      <div class="quotes-carousel-wrapper">
+        <div class="quote-card">
+          <div id="quote-carousel-box">
+            <!-- Populated dynamically by app.js -->
+          </div>
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem;">
+            <button id="quote-prev-btn" class="btn-icon" style="width: 34px; height: 34px;" title="Previous Wisdom Gem">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="quote-next-btn" class="btn-icon" style="width: 34px; height: 34px;" title="Next Wisdom Gem">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Sticky Quran Audio Player Bar -->
+    <div id="audio-player-bar" class="audio-player-bar minimized">
+      <div class="audio-bar-content">
+        
+        <!-- Track Info -->
+        <div class="audio-track-info">
+          <div class="audio-track-badge">
+            <i class="fas fa-volume-high"></i>
+          </div>
+          <div class="audio-track-text">
+            <div id="audio-surah-name" class="audio-track-surah">Surah Al-Fatihah</div>
+            <div id="audio-verse-ref" class="audio-track-verse">Verse (1:1) • Sheikh Mishary Alafasy</div>
+            <div id="audio-arabic-snippet" class="font-arabic" style="font-size: 0.9rem; color: var(--text-arabic); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+          </div>
+        </div>
+
+        <!-- Controls Center -->
+        <div class="audio-controls-center">
+          <div class="audio-btn-row">
+            <button id="audio-prev-btn" class="btn-audio-sub" title="Previous Ayah">
+              <i class="fas fa-backward-step"></i>
+            </button>
+            <button id="audio-play-btn" class="btn-audio-main" title="Play / Pause Recitation">
+              <i class="fas fa-play"></i>
+            </button>
+            <button id="audio-next-btn" class="btn-audio-sub" title="Next Ayah">
+              <i class="fas fa-forward-step"></i>
+            </button>
+          </div>
+
+          <div class="audio-timeline-box">
+            <span id="audio-current-time" class="audio-time-label">0:00</span>
+            <input type="range" id="audio-seek-bar" class="audio-seek-bar" value="0" min="0" max="100">
+            <span id="audio-duration" class="audio-time-label">0:00</span>
+          </div>
+        </div>
+
+        <!-- Extra Controls -->
+        <div class="audio-extra-controls">
+          <select id="audio-speed-select" class="speed-select" title="Recitation Speed">
+            <option value="0.75">0.75x</option>
+            <option value="1.0" selected>1.0x (Normal)</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+          </select>
+          
+          <button id="audio-auto-toggle" class="btn-audio-sub" title="Auto-Play Next Verse" style="font-size: 0.85rem; font-weight: 700;">
+            <i class="fas fa-repeat"></i> Auto
+          </button>
+
+          <button id="audio-close-btn" class="btn-audio-sub" title="Hide Player">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal Deep-Dive Dialog -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-card">
+        <button id="modal-close-btn" class="modal-close-btn" title="Close Dialog">
+          <i class="fas fa-times"></i>
+        </button>
+        <div id="modal-content">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Master Responsive Footer with Rule 1 Versioning -->
+    <footer class="master-footer">
+      <div class="footer-content">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <div class="footer-title">
+              <span class="gradient-text-gold">100Top</span> Islam & Quran • The Living Matrix
+            </div>
+            <p class="footer-desc">
+              A comprehensive open-access digital sanctuary showcasing the top 200 fundamental and profound dimensions of Islamic civilization, Arabic linguistics, and Quranic revelation.
+            </p>
+          </div>
+
+          <div class="footer-version-tag">
+            <i class="fas fa-code-branch text-emerald"></i>
+            <span>v1.0.0 (updated 2026-08-24 01:17)</span>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div>
+            &copy; 2026 100Top Islam & Quran. Open-source educational initiative. Built for humanity.
+          </div>
+          <ul class="footer-links">
+            <li><a href="#tab-concepts">200 Dimensions</a></li>
+            <li><a href="#tab-reservations">Top 20 Reservations</a></li>
+            <li><a href="#tab-questions">Reflections & Journal</a></li>
+            <li><a href="#tab-flashcards">Flashcard Hub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
