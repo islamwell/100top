@@ -123,10 +123,31 @@
     checkUrlHash();
   }
 
+    // =========================================================================
+  // TAB SWITCHER & SMOOTH SECTION SCROLLING
   // =========================================================================
-  // TAB SWITCHER CONTROLLER
-  // =========================================================================
-  function switchTab(targetTab) {
+  function scrollToSection(targetTab) {
+    let targetElement = null;
+    if (targetTab === 'concepts') {
+      targetElement = document.querySelector('.search-filter-section') || document.getElementById('tab-concepts');
+    } else {
+      targetElement = document.getElementById(`tab-${targetTab}`);
+    }
+
+    if (targetElement) {
+      const navbar = document.querySelector('.navbar');
+      const navbarHeight = navbar ? navbar.offsetHeight : 70;
+      const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - navbarHeight - 15;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function switchTab(targetTab, shouldScroll = true) {
     if (!targetTab) return;
     
     // Update nav tab buttons
@@ -152,17 +173,18 @@
       renderCurrentFlashcard();
     }
     
-    // Smooth scroll to search hub or top of tab
-    const searchHub = document.querySelector('.search-filter-section');
-    if (searchHub && window.scrollY > 300) {
-      searchHub.scrollIntoView({ behavior: 'smooth' });
+    if (shouldScroll) {
+      // Defer scroll to next frame to ensure pane display:block is active
+      setTimeout(() => {
+        scrollToSection(targetTab);
+      }, 50);
     }
   }
 
   function checkUrlHash() {
     const hash = window.location.hash.replace('#', '').replace('tab-', '');
     if (['concepts', 'reservations', 'questions', 'flashcards'].includes(hash)) {
-      switchTab(hash);
+      switchTab(hash, true);
     }
   }
 
@@ -1051,6 +1073,16 @@
         const targetTab = btn.getAttribute('data-tab');
         switchTab(targetTab);
       });
+
+    // Brand Logo Click (Scroll to Top)
+    const brandLogo = document.querySelector('.brand-logo');
+    if (brandLogo) {
+      brandLogo.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab('concepts', false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
     });
 
     // Footer Navigation Links
@@ -1111,7 +1143,11 @@
 
         document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
+        if (state.activeTab !== 'concepts') {
+          switchTab('concepts', false);
+        }
         renderCards();
+        scrollToSection('concepts');
       });
     }
 
