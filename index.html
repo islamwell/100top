@@ -31,9 +31,9 @@
           <div class="brand-icon">
             <i class="fas fa-kaaba"></i>
           </div>
-          <div>
-            <span class="gradient-text-gold">100Top</span><span style="color: #fff;">Islam</span>
-            <span class="brand-badge">2026 Pro</span>
+          <div class="brand-name">
+            <div><span class="gradient-text-gold">100Top</span><span style="color: #fff;">Islam</span><span class="brand-badge">2026</span></div>
+            <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-emerald-bright);">The Living Matrix</span>
           </div>
         </a>
 
@@ -90,6 +90,12 @@
       <p class="hero-subtitle">
         An immersive exploration across Arabic grammar, Quranic recitation audio, theology, spiritual purification, Islamic civilization, cosmology, rational defenses against misconceptions, and transformative reflections.
       </p>
+
+      <button class="hero-cta" onclick="document.querySelector('.search-filter-section').scrollIntoView({behavior:'smooth'})">
+        <i class="fas fa-compass"></i>
+        <span>Start Exploring</span>
+        <i class="fas fa-arrow-right"></i>
+      </button>
 
       <!-- Interactive Metrics Grid -->
       <div class="hero-stats-grid">
@@ -336,8 +342,11 @@
         
         <!-- Track Info -->
         <div class="audio-track-info">
-          <div class="audio-track-badge">
-            <i class="fas fa-volume-high"></i>
+          <div class="audio-track-badge" id="audio-track-badge">
+            <div class="audio-eq" id="audio-eq-bars" style="display:none;">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <i class="fas fa-volume-high" id="audio-badge-icon"></i>
           </div>
           <div class="audio-track-text">
             <div id="audio-surah-name" class="audio-track-surah">Surah Al-Fatihah</div>
@@ -415,7 +424,7 @@
 
           <div class="footer-version-tag">
             <i class="fas fa-code-branch text-emerald"></i>
-            <span>v1.0.4 (updated 2026-08-24 01:58)</span>
+            <span>v1.0.5 (updated 2026-08-24 20:25)</span>
           </div>
         </div>
 

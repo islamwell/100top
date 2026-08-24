@@ -369,8 +369,24 @@
       const isBookmarked = state.bookmarks.includes(item.id);
       const isCurrentlyPlaying = state.currentVerse && state.currentVerse.itemId === item.id && state.isPlaying;
 
+      // Per-domain accent color
+      const domainColors = {
+        'Arabic Linguistics': '#4f8ef7',
+        'Quranic Sciences':   '#a78bfa',
+        'Theology':           '#f59e0b',
+        'Pillars':            '#10b981',
+        'Spiritual':          '#ec4899',
+        'Prophetic':          '#f97316',
+        'Jurisprudence':      '#06b6d4',
+        'Islamic Civilization': '#8b5cf6',
+        'Contemporary':       '#22c55e',
+        'Cosmology':          '#38bdf8',
+      };
+      const catKey = Object.keys(domainColors).find(k => item.category.includes(k)) || 'Theology';
+      const domainColor = domainColors[catKey];
+
       return `
-        <div class="concept-card" data-id="${item.id}">
+        <div class="concept-card" data-id="${item.id}" style="--domain-color: ${domainColor}">
           <div class="card-header-top">
             <span class="card-id-badge">#${String(item.id).padStart(3, '0')}</span>
             <span class="card-category-tag">${item.category.split('&')[0].trim()}</span>
@@ -970,6 +986,20 @@
     if (dom.audioPlayBtn) {
       dom.audioPlayBtn.innerHTML = state.isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
     }
+
+    // Equalizer animation: show when playing
+    const eqBars = document.getElementById('audio-eq-bars');
+    const badgeIcon = document.getElementById('audio-badge-icon');
+    if (eqBars && badgeIcon) {
+      if (state.isPlaying) {
+        eqBars.style.display = 'flex';
+        badgeIcon.style.display = 'none';
+      } else {
+        eqBars.style.display = 'none';
+        badgeIcon.style.display = '';
+      }
+    }
+
     // Re-render play button states on cards
     document.querySelectorAll('.btn-play-verse').forEach(btn => {
       const itemId = Number(btn.getAttribute('data-item-id'));
@@ -1453,6 +1483,18 @@
 
     // Hash change listener
     window.addEventListener('hashchange', checkUrlHash);
+
+    // Navbar scroll shadow
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 10) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }, { passive: true });
+    }
   }
 
   // Run upon DOM ready
