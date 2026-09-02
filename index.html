@@ -11,6 +11,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050f0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="100Top Islam">
+
   <!-- FontAwesome 6 Pro CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -69,6 +76,10 @@
 
         <!-- Navigation Actions -->
         <div class="nav-actions">
+          <button id="keyboard-shortcuts-btn" class="btn-icon" title="Keyboard Shortcuts (?)">
+            <i class="fas fa-keyboard"></i>
+          </button>
+
           <button id="theme-toggle-btn" class="btn-icon" title="Toggle Theme (Emerald / Midnight / Sand)">
             <i class="fas fa-gem"></i>
           </button>
@@ -133,6 +144,18 @@
           </div>
 
           <div class="filter-actions">
+            <button id="btn-random-dimension" class="btn-filter-toggle" title="Pick a Random Dimension">
+              <i class="fas fa-dice text-gold"></i>
+              <span>Surprise Me</span>
+            </button>
+
+            <!-- Arabic Font Size Controller -->
+            <div style="display: inline-flex; align-items: center; gap: 0.25rem;" title="Adjust Arabic Font Size">
+              <button class="btn-font-scale" data-scale="sm" title="Standard Arabic Font">A-</button>
+              <button class="btn-font-scale active" data-scale="md" title="Medium Arabic Font">A</button>
+              <button class="btn-font-scale" data-scale="lg" title="Large Arabic Font">A+</button>
+            </div>
+
             <button id="filter-bookmarks-btn" class="btn-filter-toggle" title="View Bookmarked Items">
               <i class="far fa-bookmark"></i>
               <span>Saved</span>
@@ -202,6 +225,12 @@
             <i class="fas fa-filter search-icon"></i>
             <input type="text" id="reservation-search" class="search-input" placeholder="Search reservations (e.g. suffering, science, women, free will, warfare)...">
           </div>
+          <div style="text-align: right; margin-top: 0.5rem;">
+            <button id="btn-toggle-all-reservations" class="btn-filter-toggle" style="margin-top: 0.5rem;" title="Expand or Collapse All Reservations">
+              <i class="fas fa-arrows-up-down"></i>
+              <span id="toggle-all-res-text">Expand All</span>
+            </button>
+          </div>
         </div>
 
         <!-- Reservations Accordion Container -->
@@ -219,6 +248,16 @@
             </h2>
             <p class="section-subtitle">Deep philosophical and spiritual introspection questions designed to awaken consciousness. Your personal journal notes are securely saved on your device.</p>
           </div>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button id="btn-backup-data" class="btn-filter-toggle" title="Backup Bookmarks & Notes (JSON)">
+              <i class="fas fa-cloud-arrow-down"></i> Backup
+            </button>
+            <button id="btn-restore-data-trigger" class="btn-filter-toggle" title="Restore Data from JSON">
+              <i class="fas fa-cloud-arrow-up"></i> Restore
+            </button>
+            <input type="file" id="restore-file-input" accept=".json" style="display: none;">
+          </div>
+
           <button id="export-journal-btn" class="btn-filter-toggle active" style="padding: 0.6rem 1.2rem;">
             <i class="fas fa-download"></i> Export My Journal (.md)
           </button>
@@ -260,6 +299,10 @@
           </div>
 
           <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <button id="btn-flash-mode-toggle" class="btn-filter-toggle" title="Toggle Question/Answer Side">
+              <i class="fas fa-repeat"></i> <span id="flash-mode-label">Mode: Term → Meaning</span>
+            </button>
+
             <button id="flash-shuffle-btn" class="btn-filter-toggle" title="Shuffle Current Deck">
               <i class="fas fa-shuffle"></i> <span>Shuffle</span>
             </button>
@@ -378,6 +421,28 @@
 
         <!-- Extra Controls -->
         <div class="audio-extra-controls">
+          <!-- Multi-Reciter Selector -->
+          <select id="audio-reciter-select" class="audio-reciter-select" title="Select Quranic Reciter">
+            <option value="Alafasy_128kbps" selected>Mishary Alafasy</option>
+            <option value="Husary_128kbps">Mahmoud Al-Husary</option>
+            <option value="AbdulSamad_64kbps_QuranExplorer.Com">AbdulBaset AbdulSamad</option>
+            <option value="Abu_Bakr_Ash-Shaatree_128kbps">Abu Bakr Al-Shatri</option>
+            <option value="Ghamadi_40kbps">Saad Al-Ghamdi</option>
+          </select>
+
+          <!-- Repeat Mode Button -->
+          <button id="audio-repeat-btn" class="btn-audio-sub btn-audio-repeat" title="Playback Mode: Normal / Repeat 1 Ayah / Continuous">
+            <i class="fas fa-repeat"></i>
+          </button>
+
+          <!-- Volume Controls -->
+          <div class="audio-volume-wrap">
+            <button id="audio-volume-btn" class="btn-audio-sub" title="Mute / Unmute">
+              <i class="fas fa-volume-high"></i>
+            </button>
+            <input type="range" id="audio-volume-slider" class="audio-volume-slider" min="0" max="1" step="0.05" value="1" title="Volume">
+          </div>
+
           <select id="audio-speed-select" class="speed-select" title="Recitation Speed">
             <option value="0.75">0.75x</option>
             <option value="1.0" selected>1.0x (Normal)</option>
@@ -409,6 +474,43 @@
       </div>
     </div>
 
+    
+    <!-- Floating Back-to-Top Button -->
+    <button id="back-to-top-btn" class="back-to-top-btn" title="Back to Top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Keyboard Shortcuts Modal Dialog -->
+    <div id="shortcuts-modal" class="modal-overlay">
+      <div class="modal-card" style="max-width: 600px;">
+        <button id="shortcuts-close-btn" class="modal-close-btn" title="Close">
+          <i class="fas fa-times"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1rem;"><i class="fas fa-keyboard"></i></div>
+          <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: #fff;">Keyboard Shortcuts</h3>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Navigate and explore 100Top Islam with blazing speed using your keyboard.</p>
+        
+        <div class="shortcuts-grid">
+          <div class="shortcut-item"><span class="shortcut-label">Flip Flashcard / Pause Audio</span><kbd>Space</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Next Card / Quote</span><kbd>→</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Prev Card / Quote</span><kbd>←</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Quick Search Focus</span><kbd>/</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Random Dimension</span><kbd>R</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Cycle Themes</span><kbd>T</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Mute / Unmute Audio</span><kbd>M</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Tabs (1:Catalog, 2:Reservations, 3:Journal, 4:Flashcards)</span><kbd>1-4</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Close Dialog / Clear Search</span><kbd>Esc</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-label">Open Shortcuts Help</span><kbd>?</kbd></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <button id="shortcuts-done-btn" class="btn-flash-action" style="padding: 0.6rem 1.5rem;">Got it!</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Master Responsive Footer with Rule 1 Versioning -->
     <footer class="master-footer">
       <div class="footer-content">
@@ -424,7 +526,7 @@
 
           <div class="footer-version-tag">
             <i class="fas fa-code-branch text-emerald"></i>
-            <span>v1.0.5 (updated 2026-08-24 20:25)</span>
+            <span>v1.0.6 (updated 2026-09-02 18:20)</span>
           </div>
         </div>
 

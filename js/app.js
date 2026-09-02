@@ -7,7 +7,7 @@
 (function() {
   'use strict';
 
-  // State Management
+    // State Management
   const state = {
     activeTab: 'concepts',
     selectedCategory: 'all',
@@ -16,15 +16,23 @@
     onlyBookmarks: false,
     bookmarks: JSON.parse(localStorage.getItem('100top_bookmarks') || '[]'),
     journalNotes: JSON.parse(localStorage.getItem('100top_journal') || '{}'),
+    masteredCards: JSON.parse(localStorage.getItem('100top_mastered_cards') || '[]'),
     activeFlashcardIndex: 0,
-    shuffledFlashcards: [],
+    flashcardCategory: 'all',
+    flashcardDeck: [],
+    flashcardReverseMode: false,
     theme: localStorage.getItem('100top_theme') || 'emerald',
+    arabicFontScale: localStorage.getItem('100top_arabic_scale') || 'md',
     
     // Audio Player State
     audio: new Audio(),
     currentVerse: null,
     isPlaying: false,
-    autoPlayNext: false,
+    autoPlayNext: true,
+    repeatMode: localStorage.getItem('100top_repeat_mode') || 'all', // 'one' | 'all' | 'off'
+    selectedReciter: localStorage.getItem('100top_reciter') || 'Alafasy_128kbps',
+    volume: parseFloat(localStorage.getItem('100top_volume') || '1.0'),
+    isMuted: false,
     playbackRate: 1.0,
     quoteIndex: 0
   };
@@ -102,16 +110,324 @@
     audioAutoToggle: document.getElementById('audio-auto-toggle'),
     audioCloseBtn: document.getElementById('audio-close-btn'),
 
-    // Toast Container
+        // Top 20 New Controls
+    audioReciterSelect: document.getElementById('audio-reciter-select'),
+    audioRepeatBtn: document.getElementById('audio-repeat-btn'),
+    audioVolumeBtn: document.getElementById('audio-volume-btn'),
+    audioVolumeSlider: document.getElementById('audio-volume-slider'),
+    btnRandomDimension: document.getElementById('btn-random-dimension'),
+    btnFontScales: document.querySelectorAll('.btn-font-scale'),
+    btnToggleAllReservations: document.getElementById('btn-toggle-all-reservations'),
+    toggleAllResText: document.getElementById('toggle-all-res-text'),
+    btnFlashModeToggle: document.getElementById('btn-flash-mode-toggle'),
+    flashModeLabel: document.getElementById('flash-mode-label'),
+    btnBackupData: document.getElementById('btn-backup-data'),
+    btnRestoreDataTrigger: document.getElementById('btn-restore-data-trigger'),
+    restoreFileInput: document.getElementById('restore-file-input'),
+    backToTopBtn: document.getElementById('back-to-top-btn'),
+    keyboardShortcutsBtn: document.getElementById('keyboard-shortcuts-btn'),
+    shortcutsModal: document.getElementById('shortcuts-modal'),
+    shortcutsCloseBtn: document.getElementById('shortcuts-close-btn'),
+    shortcutsDoneBtn: document.getElementById('shortcuts-done-btn'),
     toastContainer: document.getElementById('toast-container')
   };
+
+    // =========================================================================
+  // ARABIC TASHKEEL NORMALIZER & DIACRITICS STRIPPER
+  // =========================================================================
+  function normalizeArabic(text) {
+    if (!text) return '';
+    return text
+      .replace(/[\u064B-\u065F\u0670]/g, '') // strip harakat (fathatan, dammatan, fatha, damma, etc.)
+      .replace(/[إأآٱ]/g, 'ا') // unify Alef variants
+      .replace(/[ى]/g, 'ي') // unify Yaa
+      .replace(/[ة]/g, 'ه') // unify Taa Marbuta
+      .replace(/[ؤ]/g, 'و') // unify Waw Hamza
+      .replace(/[ئ]/g, 'ي') // unify Yaa Hamza
+      .replace(/[؀-؅؛؞؟ءۖ-ۜ۟-۪ۨ-ۭ]/g, '')
+      .replace(/[\s\-_,\.]+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+
+  // =========================================================================
+  // ARABIC FONT SCALER & RECITER CONTROLLERS
+  // =========================================================================
+  function applyArabicFontScale(scale) {
+    state.arabicFontScale = scale;
+    document.documentElement.setAttribute('data-arabic-scale', scale);
+    localStorage.setItem('100top_arabic_scale', scale);
+    if (dom.btnFontScales) {
+      dom.btnFontScales.forEach(btn => {
+        if (btn.getAttribute('data-scale') === scale) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+  }
+
+  function initReciterAndVolume() {
+    if (dom.audioReciterSelect) {
+      dom.audioReciterSelect.value = state.selectedReciter;
+    }
+    if (dom.audioVolumeSlider) {
+      dom.audioVolumeSlider.value = state.volume;
+      state.audio.volume = state.volume;
+    }
+    updateRepeatModeUI();
+  }
+
+  function updateRepeatModeUI() {
+    if (!dom.audioRepeatBtn) return;
+    dom.audioRepeatBtn.classList.remove('repeat-one', 'repeat-all');
+    if (state.repeatMode === 'one') {
+      dom.audioRepeatBtn.classList.add('repeat-one');
+      dom.audioRepeatBtn.title = 'Repeat Mode: Single Ayah Loop (Hifdh)';
+    } else if (state.repeatMode === 'all') {
+      dom.audioRepeatBtn.classList.add('repeat-all');
+      dom.audioRepeatBtn.title = 'Repeat Mode: Auto-Play Next Ayah';
+    } else {
+      dom.audioRepeatBtn.title = 'Repeat Mode: Stop at End';
+    }
+  }
+
+  function cycleRepeatMode() {
+    if (state.repeatMode === 'all') {
+      state.repeatMode = 'one';
+      showToast('🔂 Loop 1 Ayah: Repeat single verse for memorization');
+    } else if (state.repeatMode === 'one') {
+      state.repeatMode = 'off';
+      showToast('⏹ Normal Mode: Stop playback after current verse');
+    } else {
+      state.repeatMode = 'all';
+      showToast('🔁 Continuous Mode: Stream next verses automatically');
+    }
+    localStorage.setItem('100top_repeat_mode', state.repeatMode);
+    updateRepeatModeUI();
+  }
+
+  function animateHeroNumbers() {
+    const chips = document.querySelectorAll('.stat-number');
+    chips.forEach(chip => {
+      const rawText = chip.textContent.replace(/,/g, '');
+      const target = parseInt(rawText, 10);
+      if (isNaN(target)) return;
+
+      let current = 0;
+      const duration = 1200;
+      const start = performance.now();
+
+      function updateCounter(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const val = Math.floor(easeOut * target);
+        chip.textContent = val > 999 ? val.toLocaleString() : val;
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          chip.textContent = target > 999 ? target.toLocaleString() : target;
+        }
+      }
+      requestAnimationFrame(updateCounter);
+    });
+  }
+
+  // =========================================================================
+  // TOUCH GESTURES (Mobile / Tablet Swipe)
+  // =========================================================================
+  function initTouchGestures() {
+    // Flashcard touch swipe
+    if (dom.flashcardWrapper) {
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      dom.flashcardWrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      dom.flashcardWrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+
+      function handleSwipe() {
+        const threshold = 50;
+        if (touchEndX < touchStartX - threshold) {
+          nextFlashcard(); // Swipe Left -> Next
+        } else if (touchEndX > touchStartX + threshold) {
+          prevFlashcard(); // Swipe Right -> Prev
+        }
+      }
+    }
+
+    // Quotes carousel touch swipe
+    if (dom.quoteBox) {
+      let quoteStartX = 0;
+      let quoteEndX = 0;
+
+      dom.quoteBox.addEventListener('touchstart', (e) => {
+        quoteStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      dom.quoteBox.addEventListener('touchend', (e) => {
+        quoteEndX = e.changedTouches[0].screenX;
+        const threshold = 40;
+        if (quoteEndX < quoteStartX - threshold) {
+          nextQuote();
+        } else if (quoteEndX > quoteStartX + threshold) {
+          prevQuote();
+        }
+      }, { passive: true });
+    }
+  }
+
+  // =========================================================================
+  // "SURPRISE ME" / RANDOM DIMENSION DISCOVERY
+  // =========================================================================
+  function pickRandomDimension() {
+    if (!window.APP_DATA || !window.APP_DATA.items.length) return;
+    const randomIndex = Math.floor(Math.random() * window.APP_DATA.items.length);
+    const item = window.APP_DATA.items[randomIndex];
+
+    // Reset filters
+    state.searchQuery = '';
+    if (dom.searchInput) dom.searchInput.value = '';
+    state.selectedCategory = 'all';
+    state.onlyBookmarks = false;
+    document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+    const allChip = document.querySelector('.category-chip[data-cat="all"]');
+    if (allChip) allChip.classList.add('active');
+
+    if (state.activeTab !== 'concepts') {
+      switchTab('concepts', false);
+    }
+    renderCards();
+
+    // Scroll to and highlight selected card
+    setTimeout(() => {
+      const card = document.querySelector(`.concept-card[data-id="${item.id}"]`);
+      if (card) {
+        card.classList.add('card-highlight-target');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          card.classList.remove('card-highlight-target');
+          openModal(item.id);
+        }, 800);
+      }
+    }, 150);
+
+    showToast(`✨ Surprise Gem: #${item.id} ${item.title}`);
+  }
+
+  // =========================================================================
+  // DATA BACKUP & RESTORE (JSON EXPORT/IMPORT)
+  // =========================================================================
+  function backupUserData() {
+    const backupData = {
+      app: '100Top Islam & Quran',
+      version: '1.0.6',
+      exportedAt: new Date().toISOString(),
+      bookmarks: state.bookmarks,
+      masteredCards: state.masteredCards,
+      journalNotes: state.journalNotes,
+      theme: state.theme,
+      reciter: state.selectedReciter
+    };
+
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `100top_islam_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('User data backup exported successfully! 💾');
+  }
+
+  function restoreUserData(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.bookmarks && Array.isArray(data.bookmarks)) {
+          state.bookmarks = data.bookmarks;
+          localStorage.setItem('100top_bookmarks', JSON.stringify(state.bookmarks));
+        }
+        if (data.masteredCards && Array.isArray(data.masteredCards)) {
+          state.masteredCards = data.masteredCards;
+          localStorage.setItem('100top_mastered_cards', JSON.stringify(state.masteredCards));
+        }
+        if (data.journalNotes && typeof data.journalNotes === 'object') {
+          state.journalNotes = data.journalNotes;
+          localStorage.setItem('100top_journal', JSON.stringify(state.journalNotes));
+        }
+        renderCards();
+        renderQuestions();
+        renderCurrentFlashcard();
+        showToast('Backup restored successfully! 🎉');
+      } catch (err) {
+        console.error(err);
+        showToast('Error restoring backup file. Please ensure it is valid JSON.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // =========================================================================
+  // SHARE / COPY AYAH
+  // =========================================================================
+  function shareAyah(itemId) {
+    const item = window.APP_DATA.items.find(i => i.id === itemId);
+    if (!item) return;
+
+    const sharePayload = {
+      title: `100Top Islam: ${item.title} (${item.arabic})`,
+      text: `"${item.verse.textArabic}"\n"${item.verse.textEnglish}"\n— Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})\n\nCore Dimension: ${item.title} (Root: ${item.root})\nSummary: ${item.summary}\nPractical Action: ${item.practicalTakeaway}\n\nExplore 200 Dimensions of Islam & Quran:`,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      navigator.share(sharePayload).catch(() => {});
+    } else {
+      copyTextToClipboard(`${sharePayload.title}\n\n${sharePayload.text}\n${sharePayload.url}`);
+      showToast('Ayah and Dimension copied to clipboard! 📋');
+    }
+  }
+
+  // =========================================================================
+  // TOGGLE ALL RESERVATIONS
+  // =========================================================================
+  function toggleAllReservations() {
+    const cards = document.querySelectorAll('.reservation-card');
+    const anyClosed = Array.from(cards).some(card => !card.classList.contains('open'));
+    cards.forEach(card => {
+      if (anyClosed) {
+        card.classList.add('open');
+      } else {
+        card.classList.remove('open');
+      }
+    });
+
+    if (dom.toggleAllResText) {
+      dom.toggleAllResText.textContent = anyClosed ? 'Collapse All' : 'Expand All';
+    }
+  }
 
   // =========================================================================
   // INITIALIZATION
   // =========================================================================
   function init() {
-    applyTheme(state.theme);
+        applyTheme(state.theme);
+    applyArabicFontScale(state.arabicFontScale);
+    initReciterAndVolume();
     initCanvas();
+    animateHeroNumbers();
     renderCategories();
     renderCards();
     renderReservations();
@@ -119,6 +435,9 @@
     initFlashcards();
     renderQuote();
     initAudioEngine();
+    initTouchGestures();
+    bindEvents();
+    checkUrlHash();
     bindEvents();
     checkUrlHash();
   }
@@ -441,9 +760,14 @@
           <span class="card-id-badge" style="font-size: 0.9rem; padding: 0.3rem 0.8rem;">Dimension #${String(item.id).padStart(3, '0')}</span>
           <span class="card-category-tag" style="font-size: 0.85rem;">${item.category}</span>
         </div>
-        <button class="btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" data-id="${item.id}" style="font-size: 1.3rem;">
-          <i class="${isBookmarked ? 'fas' : 'far'} fa-bookmark"></i>
-        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="btn-share-ayah btn-icon" data-id="${item.id}" title="Share Ayah & Takeaway" style="width: 38px; height: 38px;">
+            <i class="fas fa-share-nodes"></i>
+          </button>
+          <button class="btn-bookmark ${isBookmarked ? 'bookmarked' : ''}" data-id="${item.id}" style="font-size: 1.3rem;">
+            <i class="${isBookmarked ? 'fas' : 'far'} fa-bookmark"></i>
+          </button>
+        </div>
       </div>
 
       <div style="text-align: right; margin-bottom: 1rem;">
@@ -574,11 +898,13 @@
   // =========================================================================
   // REFLECTIVE INQUIRIES & PERSONAL JOURNAL
   // =========================================================================
-  function renderQuestions() {
+    function renderQuestions() {
     if (!dom.questionsContainer || !window.APP_DATA) return;
 
     dom.questionsContainer.innerHTML = window.APP_DATA.questions.map((q, index) => {
       const savedNote = state.journalNotes[q.id] || '';
+      const wordCount = savedNote.trim() ? savedNote.trim().split(/\s+/).length : 0;
+      const charCount = savedNote.length;
 
       return `
         <div class="question-card" data-qid="${q.id}">
@@ -608,25 +934,45 @@
 
           <div>
             <textarea class="journal-textarea" data-qid="${q.id}" placeholder="Write your private confidential reflections here... (auto-saved locally)">${savedNote}</textarea>
-            <div style="display: flex; align-items: center; justify-content: space-between;">
-              <button class="journal-save-btn" data-qid="${q.id}">
-                <i class="fas fa-save"></i> Save Reflection
-              </button>
-              <span class="save-indicator" data-qid="${q.id}" style="font-size: 0.75rem; color: var(--accent-emerald-bright); display: none;">Saved!</span>
+            <div class="journal-footer-row">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <button class="journal-save-btn" data-qid="${q.id}">
+                  <i class="fas fa-save"></i> Save Reflection
+                </button>
+                <span class="journal-save-status" data-qid="${q.id}">
+                  <i class="fas fa-check-circle"></i> Saved!
+                </span>
+              </div>
+              <span class="journal-counter-text" data-qid="${q.id}">
+                ${wordCount} words • ${charCount} chars
+              </span>
             </div>
           </div>
         </div>
       `;
     }).join('');
+
+    // Attach input listeners for live word counting
+    dom.questionsContainer.querySelectorAll('.journal-textarea').forEach(ta => {
+      ta.addEventListener('input', () => {
+        const qid = ta.getAttribute('data-qid');
+        const text = ta.value;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const counter = dom.questionsContainer.querySelector(`.journal-counter-text[data-qid="${qid}"]`);
+        if (counter) counter.textContent = `${words} words • ${text.length} chars`;
+      });
+    });
   }
 
   function saveJournalNote(qid, text) {
     state.journalNotes[qid] = text;
     localStorage.setItem('100top_journal', JSON.stringify(state.journalNotes));
-    const indicator = document.querySelector(`.save-indicator[data-qid="${qid}"]`);
-    if (indicator) {
-      indicator.style.display = 'inline';
-      setTimeout(() => { indicator.style.display = 'none'; }, 2000);
+    const status = dom.questionsContainer.querySelector(`.journal-save-status[data-qid="${qid}"]`);
+    if (status) {
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      status.innerHTML = `<i class="fas fa-check-circle"></i> Saved at ${timeStr}`;
+      status.classList.add('visible');
+      setTimeout(() => { status.classList.remove('visible'); }, 3000);
     }
   }
 
@@ -712,76 +1058,140 @@
 
     const isCurrentlyPlaying = state.currentVerse && state.currentVerse.itemId === item.id && state.isPlaying;
 
-    // Front Side (Question / Arabic Calligraphy & Root)
-    dom.flashcardFront.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-        <span class="card-id-badge" style="font-size: 0.85rem;">Card #${String(item.id).padStart(3, '0')}</span>
-        <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
-        ${isMastered ? '<span style="font-size: 0.75rem; color: var(--accent-emerald-bright); font-weight: 800; background: rgba(16,185,129,0.15); padding: 0.2rem 0.6rem; border-radius: var(--radius-full);"><i class="fas fa-check"></i> Mastered</span>' : ''}
-      </div>
-
-      <div style="text-align: center; margin: auto 0; padding: 1.5rem 0;">
-        <div style="font-size: 0.85rem; color: var(--accent-gold-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;">
-          What is the meaning and Quranic significance of:
+        // Render Front & Back depending on Reverse Mode
+    if (!state.flashcardReverseMode) {
+      // Front Side (Arabic Calligraphy & Root)
+      dom.flashcardFront.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="card-id-badge" style="font-size: 0.85rem;">Card #${String(item.id).padStart(3, '0')}</span>
+          <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+          ${isMastered ? '<span style="font-size: 0.75rem; color: var(--accent-emerald-bright); font-weight: 800; background: rgba(16,185,129,0.15); padding: 0.2rem 0.6rem; border-radius: var(--radius-full);"><i class="fas fa-check"></i> Mastered</span>' : ''}
         </div>
-        <div class="font-arabic" style="font-size: 3.2rem; color: var(--text-arabic); line-height: 1.3; margin-bottom: 1rem;">
-          ${item.arabic}
-        </div>
-        <div class="card-root-box" style="font-size: 1.05rem; padding: 0.4rem 1rem;">
-          Linguistic Root: <strong>${item.root}</strong>
-        </div>
-      </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
-        <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" title="Recite verse audio" style="padding: 0.4rem 0.9rem;">
-          <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite Ayah</span>
-        </button>
-
-        <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
-          <i class="fas fa-hand-pointer text-gold"></i> Click card or press Space to Flip
-        </div>
-      </div>
-    `;
-
-    // Back Side (Answer / English Title, Meaning, Verse & Practical Takeaway)
-    dom.flashcardBack.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-        <span class="card-id-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald-bright); font-size: 0.85rem;">
-          <i class="fas fa-lightbulb"></i> Answer & Reflection
-        </span>
-        <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
-      </div>
-
-      <div style="margin: auto 0; padding: 0.75rem 0;">
-        <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
-          <h3 style="font-family: var(--font-display); font-size: 1.45rem; font-weight: 800; color: #fff;">${item.title}</h3>
-          <span class="font-arabic" style="font-size: 1.3rem; color: var(--accent-gold-bright);">${item.arabic}</span>
-        </div>
-        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.85rem;">${item.summary}</p>
-        
-        <div class="card-verse-box" style="padding: 0.75rem 1rem; margin-bottom: 0.85rem;">
-          <div class="card-verse-header" style="margin-bottom: 0.35rem;">
-            <span class="card-verse-ref" style="font-size: 0.75rem;">Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})</span>
-            <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" style="padding: 0.2rem 0.6rem; font-size: 0.7rem;">
-              <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite</span>
-            </button>
+        <div style="text-align: center; margin: auto 0; padding: 1.5rem 0;">
+          <div style="font-size: 0.85rem; color: var(--accent-gold-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;">
+            What is the meaning and Quranic significance of:
           </div>
-          <div class="card-verse-arabic font-arabic" style="font-size: 1.05rem; line-height: 1.5;">${item.verse.textArabic}</div>
-          <div class="card-verse-english" style="font-size: 0.78rem;">"${item.verse.textEnglish}"</div>
+          <div class="font-arabic" style="font-size: 3.2rem; color: var(--text-arabic); line-height: 1.3; margin-bottom: 1rem;">
+            ${item.arabic}
+          </div>
+          <div class="card-root-box" style="font-size: 1.05rem; padding: 0.4rem 1rem;">
+            Linguistic Root: <strong>${item.root}</strong>
+          </div>
         </div>
 
-        <div style="font-size: 0.85rem; color: var(--accent-emerald-bright); line-height: 1.5; background: rgba(16,185,129,0.08); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border-left: 2px solid var(--accent-emerald);">
-          <strong>2026 Action:</strong> ${item.practicalTakeaway}
-        </div>
-      </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+          <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" title="Recite verse audio" style="padding: 0.4rem 0.9rem;">
+            <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite Ayah</span>
+          </button>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle);">
-        <span style="font-size: 0.75rem; color: var(--text-muted);">Root: ${item.root}</span>
-        <span style="color: var(--accent-gold-bright); font-size: 0.85rem; font-weight: 700; cursor: pointer;">
-          Click to Flip Back <i class="fas fa-rotate" style="margin-left: 0.25rem;"></i>
-        </span>
-      </div>
-    `;
+          <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+            <i class="fas fa-hand-pointer text-gold"></i> Click card or press Space to Flip
+          </div>
+        </div>
+      `;
+
+      // Back Side (Answer / English Title, Meaning, Verse & Practical Takeaway)
+      dom.flashcardBack.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="card-id-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald-bright); font-size: 0.85rem;">
+            <i class="fas fa-lightbulb"></i> Answer & Reflection
+          </span>
+          <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+        </div>
+
+        <div style="margin: auto 0; padding: 0.75rem 0;">
+          <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+            <h3 style="font-family: var(--font-display); font-size: 1.45rem; font-weight: 800; color: #fff;">${item.title}</h3>
+            <span class="font-arabic" style="font-size: 1.3rem; color: var(--accent-gold-bright);">${item.arabic}</span>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.85rem;">${item.summary}</p>
+          
+          <div class="card-verse-box" style="padding: 0.75rem 1rem; margin-bottom: 0.85rem;">
+            <div class="card-verse-header" style="margin-bottom: 0.35rem;">
+              <span class="card-verse-ref" style="font-size: 0.75rem;">Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})</span>
+              <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" style="padding: 0.2rem 0.6rem; font-size: 0.7rem;">
+                <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite</span>
+              </button>
+            </div>
+            <div class="card-verse-arabic font-arabic" style="font-size: 1.05rem; line-height: 1.5;">${item.verse.textArabic}</div>
+            <div class="card-verse-english" style="font-size: 0.78rem;">"${item.verse.textEnglish}"</div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--accent-emerald-bright); line-height: 1.5; background: rgba(16,185,129,0.08); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border-left: 2px solid var(--accent-emerald);">
+            <strong>2026 Action:</strong> ${item.practicalTakeaway}
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle);">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Root: ${item.root}</span>
+          <span style="color: var(--accent-gold-bright); font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+            Click to Flip Back <i class="fas fa-rotate" style="margin-left: 0.25rem;"></i>
+          </span>
+        </div>
+      `;
+    } else {
+      // REVERSE MODE: Front Side has English & Clues
+      dom.flashcardFront.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="card-id-badge" style="font-size: 0.85rem;">Reverse Card #${String(item.id).padStart(3, '0')}</span>
+          <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+        </div>
+
+        <div style="margin: auto 0; padding: 1.5rem 0; text-align: center;">
+          <div style="font-size: 0.82rem; color: var(--accent-gold-bright); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;">
+            Recall the Arabic Term & Linguistic Root for:
+          </div>
+          <h3 style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem;">${item.title}</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; max-width: 550px; margin: 0 auto;">${item.summary}</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.8rem; color: var(--accent-emerald-bright);"><i class="fas fa-brain"></i> Active Recall</span>
+          <div style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+            <i class="fas fa-hand-pointer text-gold"></i> Click to Reveal Arabic
+          </div>
+        </div>
+      `;
+
+      // REVERSE MODE: Back Side reveals Arabic Calligraphy & Root
+      dom.flashcardBack.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="card-id-badge" style="background: rgba(16,185,129,0.15); color: var(--accent-emerald-bright); font-size: 0.85rem;">
+            <i class="fas fa-check"></i> Term Reveal
+          </span>
+          <span class="card-category-tag" style="font-size: 0.8rem;">${item.category}</span>
+        </div>
+
+        <div style="text-align: center; margin: auto 0; padding: 1rem 0;">
+          <div class="font-arabic" style="font-size: 3.2rem; color: var(--text-arabic); line-height: 1.3; margin-bottom: 0.75rem;">
+            ${item.arabic}
+          </div>
+          <div class="card-root-box" style="font-size: 1.1rem; padding: 0.4rem 1.2rem; margin-bottom: 1rem;">
+            Linguistic Root: <strong>${item.root}</strong>
+          </div>
+          <div style="font-size: 0.88rem; color: var(--text-secondary);">Surah ${item.verse.surahName} (${item.verse.surah}:${item.verse.ayah})</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle);">
+          <button class="btn-play-verse ${isCurrentlyPlaying ? 'playing' : ''}" data-item-id="${item.id}" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">
+            <i class="fas ${isCurrentlyPlaying ? 'fa-pause' : 'fa-play'}"></i> <span>Recite</span>
+          </button>
+          <span style="color: var(--accent-gold-bright); font-size: 0.85rem; font-weight: 700; cursor: pointer;">
+            Flip Back <i class="fas fa-rotate"></i>
+          </span>
+        </div>
+      `;
+    }
+  }
+
+  function toggleFlashcardMode() {
+    state.flashcardReverseMode = !state.flashcardReverseMode;
+    if (dom.flashModeLabel) {
+      dom.flashModeLabel.textContent = state.flashcardReverseMode ? 'Mode: Meaning → Term' : 'Mode: Term → Meaning';
+    }
+    renderCurrentFlashcard();
+    showToast(state.flashcardReverseMode ? 'Reverse Mode: Meaning on Front, Arabic on Back' : 'Standard Mode: Arabic on Front, Meaning on Back');
   }
 
   function toggleFlashcardFlip() {
@@ -868,20 +1278,32 @@
   // =========================================================================
   // QURAN AUDIO ENGINE
   // =========================================================================
+    function getReciterAudioUrl(surah, ayah) {
+    const s = String(surah).padStart(3, '0');
+    const a = String(ayah).padStart(3, '0');
+    return `https://everyayah.com/data/${state.selectedReciter}/${s}${a}.mp3`;
+  }
+
   function initAudioEngine() {
-    state.audio.addEventListener('timeupdate', () => {
+        state.audio.addEventListener('timeupdate', () => {
       if (dom.audioSeekBar && state.audio.duration) {
-        dom.audioSeekBar.value = (state.audio.currentTime / state.audio.duration) * 100;
+        const percent = (state.audio.currentTime / state.audio.duration) * 100;
+        dom.audioSeekBar.value = percent;
+        dom.audioSeekBar.style.setProperty('--seek-percent', `${percent}%`);
         if (dom.audioCurrentTime) dom.audioCurrentTime.textContent = formatTime(state.audio.currentTime);
         if (dom.audioDuration) dom.audioDuration.textContent = formatTime(state.audio.duration);
       }
     });
 
     state.audio.addEventListener('ended', () => {
-      state.isPlaying = false;
-      updateAudioUI();
-      if (state.autoPlayNext) {
+      if (state.repeatMode === 'one') {
+        state.audio.currentTime = 0;
+        state.audio.play().catch(() => {});
+      } else if (state.repeatMode === 'all') {
         playNextTrack();
+      } else {
+        state.isPlaying = false;
+        updateAudioUI();
       }
     });
 
@@ -896,10 +1318,12 @@
     });
   }
 
-  function playVerse(verseData) {
+    function playVerse(verseData) {
     state.currentVerse = verseData;
-    state.audio.src = verseData.audioUrl;
+    const dynamicAudioUrl = getReciterAudioUrl(verseData.surah, verseData.ayah);
+    state.audio.src = dynamicAudioUrl;
     state.audio.playbackRate = state.playbackRate;
+    state.audio.volume = state.isMuted ? 0 : state.volume;
     const playPromise = state.audio.play();
     if (playPromise !== undefined) {
       playPromise.catch(err => {
@@ -912,7 +1336,8 @@
     }
 
     if (dom.audioSurahName) dom.audioSurahName.textContent = `Surah ${verseData.surahName}`;
-    if (dom.audioVerseRef) dom.audioVerseRef.textContent = `Verse (${verseData.surah}:${verseData.ayah}) • Sheikh Mishary Alafasy`;
+    const reciterLabel = dom.audioReciterSelect ? dom.audioReciterSelect.options[dom.audioReciterSelect.selectedIndex].text : 'Sheikh Mishary Alafasy';
+    if (dom.audioVerseRef) dom.audioVerseRef.textContent = `Verse (${verseData.surah}:${verseData.ayah}) • ${reciterLabel}`;
     if (dom.audioArabicSnippet) dom.audioArabicSnippet.textContent = verseData.textArabic;
 
     updateAudioUI();
@@ -1257,40 +1682,18 @@
         if (e.target === dom.modalOverlay) closeModal();
       });
     }
-    if (dom.modalContent) {
+        if (dom.modalContent) {
       dom.modalContent.addEventListener('click', (e) => {
-        const playBtn = e.target.closest('.btn-play-verse');
-        if (playBtn) {
-          const itemId = Number(playBtn.getAttribute('data-item-id'));
-          const item = window.APP_DATA.items.find(i => i.id === itemId);
-          if (item) {
-            if (state.currentVerse && state.currentVerse.itemId === itemId && state.isPlaying) {
-              state.audio.pause();
-            } else {
-              playVerse({
-                itemId: item.id,
-                surah: item.verse.surah,
-                ayah: item.verse.ayah,
-                surahName: item.verse.surahName,
-                textArabic: item.verse.textArabic,
-                audioUrl: item.verse.audioUrl
-              });
-            }
-          }
-          return;
-        }
-
-        const bookmarkBtn = e.target.closest('.btn-bookmark');
-        if (bookmarkBtn) {
-          toggleBookmark(bookmarkBtn.getAttribute('data-id'));
-          openModal(bookmarkBtn.getAttribute('data-id'));
-          return;
-        }
-
         const copyBtn = e.target.closest('.btn-copy-quote');
         if (copyBtn) {
-          const text = copyBtn.getAttribute('data-quote');
-          copyTextToClipboard(text);
+          const quote = copyBtn.getAttribute('data-quote');
+          copyTextToClipboard(`"${quote}" - Linguistic Gem from 100Top Islam`);
+          showToast('Wisdom gem copied to clipboard!');
+        }
+        const shareBtn = e.target.closest('.btn-share-ayah');
+        if (shareBtn) {
+          const itemId = Number(shareBtn.getAttribute('data-id'));
+          shareAyah(itemId);
         }
       });
     }
@@ -1461,6 +1864,144 @@
       dom.audioCloseBtn.addEventListener('click', () => {
         state.audio.pause();
         dom.audioPlayerBar.classList.add('minimized');
+      });
+    }
+
+
+    // Top 20 New Event Listeners
+    // 1. Font Scaler
+    if (dom.btnFontScales) {
+      dom.btnFontScales.forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyArabicFontScale(btn.getAttribute('data-scale'));
+        });
+      });
+    }
+
+    // 2. Random Dimension (Surprise Me)
+    if (dom.btnRandomDimension) {
+      dom.btnRandomDimension.addEventListener('click', pickRandomDimension);
+    }
+
+    // 3. Multi-Reciter Selector
+    if (dom.audioReciterSelect) {
+      dom.audioReciterSelect.addEventListener('change', (e) => {
+        state.selectedReciter = e.target.value;
+        localStorage.setItem('100top_reciter', state.selectedReciter);
+        if (state.currentVerse) {
+          const wasPlaying = state.isPlaying;
+          state.audio.src = getReciterAudioUrl(state.currentVerse.surah, state.currentVerse.ayah);
+          if (wasPlaying) state.audio.play().catch(() => {});
+          if (dom.audioVerseRef) {
+            const label = e.target.options[e.target.selectedIndex].text;
+            dom.audioVerseRef.textContent = `Verse (${state.currentVerse.surah}:${state.currentVerse.ayah}) • ${label}`;
+          }
+        }
+        showToast(`Reciter switched to: ${e.target.options[e.target.selectedIndex].text}`);
+      });
+    }
+
+    // 4. Repeat Mode Button
+    if (dom.audioRepeatBtn) {
+      dom.audioRepeatBtn.addEventListener('click', cycleRepeatMode);
+    }
+
+    // 5. Volume Slider & Mute Button
+    if (dom.audioVolumeSlider) {
+      dom.audioVolumeSlider.addEventListener('input', (e) => {
+        state.volume = parseFloat(e.target.value);
+        state.isMuted = state.volume === 0;
+        state.audio.volume = state.volume;
+        localStorage.setItem('100top_volume', state.volume);
+        if (dom.audioVolumeBtn) {
+          dom.audioVolumeBtn.innerHTML = state.volume === 0 ? '<i class="fas fa-volume-xmark"></i>' : (state.volume < 0.5 ? '<i class="fas fa-volume-low"></i>' : '<i class="fas fa-volume-high"></i>');
+        }
+      });
+    }
+
+    if (dom.audioVolumeBtn) {
+      dom.audioVolumeBtn.addEventListener('click', () => {
+        state.isMuted = !state.isMuted;
+        state.audio.volume = state.isMuted ? 0 : state.volume;
+        dom.audioVolumeBtn.innerHTML = state.isMuted ? '<i class="fas fa-volume-xmark"></i>' : '<i class="fas fa-volume-high"></i>';
+        showToast(state.isMuted ? 'Audio Muted' : 'Audio Unmuted');
+      });
+    }
+
+    // 6. Expand/Collapse All Reservations
+    if (dom.btnToggleAllReservations) {
+      dom.btnToggleAllReservations.addEventListener('click', toggleAllReservations);
+    }
+
+    // 7. Flashcard Reverse Mode
+    if (dom.btnFlashModeToggle) {
+      dom.btnFlashModeToggle.addEventListener('click', toggleFlashcardMode);
+    }
+
+    // 8. Data Backup & Restore
+    if (dom.btnBackupData) {
+      dom.btnBackupData.addEventListener('click', backupUserData);
+    }
+
+    if (dom.btnRestoreDataTrigger && dom.restoreFileInput) {
+      dom.btnRestoreDataTrigger.addEventListener('click', () => dom.restoreFileInput.click());
+      dom.restoreFileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          restoreUserData(e.target.files[0]);
+          e.target.value = '';
+        }
+      });
+    }
+
+    // 9. Floating Back-to-Top Button
+    if (dom.backToTopBtn) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+          dom.backToTopBtn.classList.add('visible');
+        } else {
+          dom.backToTopBtn.classList.remove('visible');
+        }
+      }, { passive: true });
+
+      dom.backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // 10. Keyboard Shortcuts Modal & Shortcut Key Handler
+    if (dom.keyboardShortcutsBtn) {
+      dom.keyboardShortcutsBtn.addEventListener('click', () => {
+        if (dom.shortcutsModal) dom.shortcutsModal.classList.add('active');
+      });
+    }
+
+    if (dom.shortcutsCloseBtn) {
+      dom.shortcutsCloseBtn.addEventListener('click', () => {
+        if (dom.shortcutsModal) dom.shortcutsModal.classList.remove('active');
+      });
+    }
+
+    if (dom.shortcutsDoneBtn) {
+      dom.shortcutsDoneBtn.addEventListener('click', () => {
+        if (dom.shortcutsModal) dom.shortcutsModal.classList.remove('active');
+      });
+    }
+
+    if (dom.shortcutsModal) {
+      dom.shortcutsModal.addEventListener('click', (e) => {
+        if (e.target === dom.shortcutsModal) dom.shortcutsModal.classList.remove('active');
+      });
+    }
+
+    // Card delegation for Share Ayah
+    if (dom.cardsContainer) {
+      dom.cardsContainer.addEventListener('click', (e) => {
+        const shareBtn = e.target.closest('.btn-share-ayah');
+        if (shareBtn) {
+          e.stopPropagation();
+          const itemId = Number(shareBtn.getAttribute('data-id'));
+          shareAyah(itemId);
+        }
       });
     }
 

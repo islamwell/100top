@@ -2040,3 +2040,274 @@ body {
 
   .quote-card { padding: 2rem 1.5rem; }
 }
+
+
+/* ==========================================================================
+   TOP 20 IMPROVEMENTS & FIXES EXTENSIONS (v1.0.6)
+   ========================================================================== */
+
+/* 1. Global Arabic Typography Scaler */
+[data-arabic-scale="sm"] .font-arabic { font-size: 0.9em !important; }
+[data-arabic-scale="md"] .font-arabic { font-size: 1.1em !important; }
+[data-arabic-scale="lg"] .font-arabic { font-size: 1.35em !important; }
+[data-arabic-scale="xl"] .font-arabic { font-size: 1.6em !important; }
+
+.btn-font-scale {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-full);
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-mid);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+
+.btn-font-scale:hover, .btn-font-scale.active {
+  color: var(--accent-gold-bright);
+  border-color: var(--border-gold);
+  background: var(--bg-tertiary);
+}
+
+/* 2. Floating Back-To-Top Button */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 95px;
+  right: 25px;
+  z-index: 95;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-emerald));
+  color: #000;
+  border: none;
+  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 15px var(--accent-gold-glow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: all var(--t-normal);
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 25px var(--accent-gold-glow);
+}
+
+/* 3. Audio Player Multi-Reciter, Volume, Repeat & Scrub Visualizer */
+.audio-reciter-select {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  padding: 0.28rem 0.55rem;
+  outline: none;
+  cursor: pointer;
+  max-width: 170px;
+}
+
+.audio-reciter-select:hover {
+  border-color: var(--border-gold);
+  color: var(--text-primary);
+}
+
+.audio-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.audio-volume-slider {
+  width: 65px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--r-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.audio-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent-gold-bright);
+  cursor: pointer;
+}
+
+.btn-audio-repeat {
+  position: relative;
+}
+
+.btn-audio-repeat.repeat-one {
+  color: var(--accent-emerald-bright);
+}
+
+.btn-audio-repeat.repeat-one::after {
+  content: '1';
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  background: var(--accent-emerald-bright);
+  color: #000;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.btn-audio-repeat.repeat-all {
+  color: var(--accent-gold-bright);
+}
+
+/* Audio Seek Bar Visual Gradient Fill */
+.audio-seek-bar {
+  background: linear-gradient(to right, var(--accent-gold) 0%, var(--accent-gold) var(--seek-percent, 0%), rgba(255,255,255,0.12) var(--seek-percent, 0%), rgba(255,255,255,0.12) 100%);
+}
+
+/* 4. Highlight Animation for Random Dimension Picker */
+@keyframes highlightGoldPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 197, 66, 0.7); }
+  50% { transform: scale(1.02); box-shadow: 0 0 30px 6px rgba(245, 197, 66, 0.9); border-color: var(--accent-gold-bright); }
+  100% { transform: scale(1); box-shadow: 0 0 15px 2px rgba(245, 197, 66, 0.4); }
+}
+
+.card-highlight-target {
+  animation: highlightGoldPulse 2s ease-in-out 2;
+  border-color: var(--accent-gold-bright) !important;
+}
+
+/* 5. Keyboard Shortcuts Modal Dialog */
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-md);
+}
+
+.shortcut-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+kbd {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--r-xs);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--accent-gold-bright);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.5);
+}
+
+/* 6. Journal Stats & Autosave indicator */
+.journal-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.journal-counter-text {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.journal-save-status {
+  font-size: 0.76rem;
+  color: var(--accent-emerald-bright);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.journal-save-status.visible {
+  opacity: 1;
+}
+
+/* 7. Accessibility Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--accent-gold-bright);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px rgba(245, 197, 66, 0.4);
+}
+
+/* 8. Print Stylesheet */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  #canvas-bg, .navbar, .search-filter-section, .audio-player-bar, .master-footer, .back-to-top-btn, .quotes-carousel-wrapper, .hero-section {
+    display: none !important;
+  }
+  .app-container {
+    padding-bottom: 0 !important;
+  }
+  .main-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .tab-pane {
+    display: block !important;
+    page-break-after: always;
+  }
+  .cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+  }
+  .concept-card {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+  .card-arabic-heading, .card-verse-arabic {
+    color: #78350f !important;
+  }
+  .card-english-title {
+    color: #000 !important;
+  }
+  .card-summary, .card-verse-english {
+    color: #333 !important;
+  }
+}
