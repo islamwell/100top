@@ -2311,3 +2311,361 @@ kbd {
     color: #333 !important;
   }
 }
+
+
+/* ==========================================================================
+   NURULQURAN SHOWCASE VISUAL UPGRADE (v1.0.7)
+   Official Othmani Medina Mushaf Typography & Atmospheric Glassmorphism 2.0
+   ========================================================================== */
+
+/* ─── KFGQPC Official Othmani Font ─── */
+@font-face {
+  font-family: 'KFGQPC Uthmanic Script HAFS';
+  src: url('https://verses.quran.foundation/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UthmanicHafs';
+  src: url('https://verses.quran.foundation/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-arabic: 'KFGQPC Uthmanic Script HAFS', 'UthmanicHafs', 'Amiri Quran', 'Scheherazade New', 'Amiri', serif;
+  --ar-scale: 1.15;
+  
+  /* NurulQuran Gold System */
+  --nq-gold-1: #FFF0B8;
+  --nq-gold-2: #F5C97B;
+  --nq-gold-3: #D4AF37;
+  --nq-gold-4: #9A7B2C;
+
+  /* NurulQuran Bioluminescent Teals */
+  --nq-teal-1: #5EEAD4;
+  --nq-teal-2: #2DD4BF;
+  --nq-teal-3: #0F766E;
+
+  --shadow-glow: 0 0 35px rgba(245, 201, 123, 0.22);
+}
+
+/* ─── Atmospheric Aurora Glow Orbs ─── */
+.bg-canvas-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.32;
+  transition: opacity 0.5s ease;
+}
+
+.orb-1 {
+  width: 65vw;
+  height: 65vw;
+  background: radial-gradient(circle, #0F766E 0%, transparent 70%);
+  top: -20vw;
+  left: -15vw;
+  animation: orbDrift1 28s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, #1E3A8A 0%, transparent 70%);
+  bottom: -15vw;
+  right: -10vw;
+  animation: orbDrift2 32s ease-in-out infinite alternate;
+}
+
+.orb-3 {
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, transparent 70%);
+  top: 35%;
+  left: 30%;
+  animation: orbDrift3 24s ease-in-out infinite alternate;
+}
+
+@keyframes orbDrift1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8vw, 10vh) scale(1.15); }
+}
+@keyframes orbDrift2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-8vw, -6vh) scale(1.08); }
+}
+@keyframes orbDrift3 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(6vw, -8vh) scale(1.12); }
+}
+
+/* ─── Sacred Geometric Dot Grid & Film Grain ─── */
+.geometric-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: radial-gradient(var(--accent-gold-bright) 1px, transparent 1px), radial-gradient(var(--accent-emerald-bright) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: 0 0, 24px 24px;
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Bismillah Calligraphic Header ─── */
+.bismillah-hero {
+  font-family: var(--font-arabic);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--nq-gold-2);
+  margin-bottom: 24px;
+  direction: rtl;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 24px rgba(245, 201, 123, 0.45);
+  animation: fadeIn 1s ease-out;
+  line-height: 1.4;
+  user-select: none;
+}
+
+/* ─── Interactive Arabic Font Scaler Button (.nq-ar-btn) ─── */
+.nq-ar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(245, 201, 123, 0.10);
+  border: 1px solid rgba(245, 201, 123, 0.35);
+  color: var(--accent-gold-bright);
+  padding: 5px 12px;
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nq-ar-btn:hover {
+  background: rgba(245, 201, 123, 0.22);
+  border-color: var(--accent-gold-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(245, 201, 123, 0.3);
+}
+
+.nq-ar-btn .nq-ar-glyph {
+  font-family: var(--font-arabic);
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.nq-ar-btn .nq-ar-val {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--nq-gold-2);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Circular Quran Ayah Audio Button (.nq-play-btn) ─── */
+.nq-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 201, 123, 0.12);
+  border: 1px solid rgba(245, 201, 123, 0.38);
+  color: var(--nq-gold-2);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  vertical-align: middle;
+  user-select: none;
+}
+
+.nq-play-btn:hover {
+  background: rgba(245, 201, 123, 0.28);
+  color: #fff;
+  border-color: var(--accent-gold-bright);
+  transform: translateY(-1px) scale(1.08);
+  box-shadow: 0 0 16px rgba(245, 201, 123, 0.4);
+}
+
+.nq-play-btn.playing {
+  background: rgba(45, 212, 191, 0.25);
+  border-color: var(--accent-emerald-bright);
+  color: var(--accent-emerald-bright);
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.45);
+  animation: pulse-ring 1.8s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.6); }
+  70% { box-shadow: 0 0 0 8px rgba(45, 212, 191, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(45, 212, 191, 0); }
+}
+
+/* ─── Showcase Exhibits Dropdown (.islam-dropdown-wrapper) ─── */
+.islam-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.islam-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  color: var(--accent-emerald-bright);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  user-select: none;
+}
+
+.islam-dropdown-btn:hover,
+.islam-dropdown-btn.active {
+  background: rgba(45, 212, 191, 0.25);
+  border-color: var(--accent-emerald-bright);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(45, 212, 191, 0.35);
+}
+
+.islam-dropdown-btn .chevron-icon {
+  font-size: 0.75rem;
+  transition: transform var(--t-fast);
+}
+
+.islam-dropdown-btn.active .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.islam-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  background: var(--bg-glass-strong);
+  border: 1px solid var(--card-border-hover);
+  border-radius: var(--r-md);
+  padding: 10px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(212, 175, 55, 0.18);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.islam-dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.islam-dropdown-menu .dropdown-header {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-gold-bright);
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 4px;
+}
+
+.islam-dropdown-menu .dropdown-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all var(--t-fast);
+  cursor: pointer;
+}
+
+.islam-dropdown-menu .dropdown-item:hover {
+  background: var(--bg-elevated);
+  border-left: 2px solid var(--accent-gold-bright);
+  transform: translateX(4px);
+}
+
+.islam-dropdown-menu .item-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-emerald-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.islam-dropdown-menu .item-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ─── Hero Pulse Dot ─── */
+.hero-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-emerald-bright);
+  box-shadow: 0 0 12px var(--accent-emerald-bright);
+  animation: heroPulse 2s infinite;
+  display: inline-block;
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+/* ─── Enhanced Card Glassmorphism ─── */
+.concept-card {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.card-verse-arabic, .card-arabic-heading, .font-arabic {
+  font-family: var(--font-arabic) !important;
+  line-height: 1.8;
+}
+
+/* Dynamic Arabic scale support */
+.font-arabic {
+  zoom: var(--ar-scale, 1.15);
+}

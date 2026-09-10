@@ -6,9 +6,10 @@
   <meta name="description" content="Top 200 Things Related to Islam and Quran: The Living Matrix (2026 Edition). An interactive encyclopedia of Arabic linguistics, Quranic audio, theology, worship, sciences, top 20 reservations & rational reflections.">
   <title>100Top Islam & Quran • The Living Matrix (2026 Edition)</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans, Outfit, Amiri, Scheherazade New -->
+    <!-- Google & KFGQPC Official Othmani Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://verses.quran.foundation">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- PWA & Mobile Web App Meta Tags -->
@@ -25,6 +26,15 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Atmospheric Aurora Orbs, Sacred Geometry & Grain Overlay (NurulQuran Showcase) -->
+  <div class="bg-canvas-wrap">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+    <div class="aurora-orb orb-3"></div>
+  </div>
+  <div class="geometric-grid"></div>
+  <div class="grain-overlay"></div>
+
 
   <!-- Sacred Geometry Particle Canvas Background -->
   <canvas id="canvas-bg"></canvas>
@@ -76,6 +86,45 @@
 
         <!-- Navigation Actions -->
         <div class="nav-actions">
+                    <!-- Exhibits Showcase Dropdown (NurulQuran Showcase) -->
+          <div class="islam-dropdown-wrapper">
+            <button id="exhibits-dropdown-btn" class="islam-dropdown-btn" title="Explore Interactive Exhibits">
+              <i class="fas fa-compass"></i>
+              <span>Exhibits</span>
+              <i class="fas fa-chevron-down chevron-icon"></i>
+            </button>
+            <div id="exhibits-dropdown-menu" class="islam-dropdown-menu">
+              <div class="dropdown-header">Interactive Exhibits & Studies</div>
+              <div class="dropdown-item" data-filter-domain="Arabic Linguistics">
+                <span class="item-badge">Linguistics · الجَذْر</span>
+                <span class="item-title">شَجَرَةُ الجُذُور · The Root Tree & Morphology</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="Quranic Sciences">
+                <span class="item-badge">Qur'an · الآيَات</span>
+                <span class="item-title">The Signs — Miracles of the Qur'ān</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="Prophetic">
+                <span class="item-badge">Seerah · الرَّسُول</span>
+                <span class="item-title">Ten Reasons — The Case for Muhammad ﷺ</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="Spiritual">
+                <span class="item-badge">Tazkiyah · الرُّوح</span>
+                <span class="item-title">Heart & Soul · Inner Purification & Taqwa</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="Pillars">
+                <span class="item-badge">Worship · الصِّيَام</span>
+                <span class="item-title">Ar-Rayyān · The Quranic Fasting Sanctuary</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="Theology">
+                <span class="item-badge">Tawheed · شَهِدَ اللَّهُ</span>
+                <span class="item-title">The Divine Testimony — Divine Oneness</span>
+              </div>
+              <div class="dropdown-item" data-filter-domain="reservations">
+                <span class="item-badge">Apologetics · البَرَاهِين</span>
+                <span class="item-title">Top 20 Reservations & Counter-Arguments</span>
+              </div>
+            </div>
+          </div>
           <button id="keyboard-shortcuts-btn" class="btn-icon" title="Keyboard Shortcuts (?)">
             <i class="fas fa-keyboard"></i>
           </button>
@@ -89,7 +138,10 @@
 
     <!-- Hero Showcase Section -->
     <section class="hero-section">
+      <!-- Bismillah Gilded Calligraphy (NurulQuran Showcase) -->
+      <div class="bismillah-hero" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
       <div class="hero-pill">
+        <span class="hero-pulse-dot"></span>
         <i class="fas fa-star-and-crescent"></i>
         <span>The Living Encyclopedic Matrix • 2026 Next-Gen Edition</span>
       </div>
@@ -153,6 +205,12 @@
             <div style="display: inline-flex; align-items: center; gap: 0.25rem;" title="Adjust Arabic Font Size">
               <button class="btn-font-scale" data-scale="sm" title="Standard Arabic Font">A-</button>
               <button class="btn-font-scale active" data-scale="md" title="Medium Arabic Font">A</button>
+            <!-- Modern Arabic Font Scaler (.nq-ar-btn) -->
+            <button id="nq-ar-scale-btn" class="nq-ar-btn" title="Cycle Arabic Calligraphy Size">
+              <span class="nq-ar-glyph">عـ</span>
+              <span class="nq-ar-val" id="nq-ar-scale-val">1.2x</span>
+            </button>
+
               <button class="btn-font-scale" data-scale="lg" title="Large Arabic Font">A+</button>
             </div>
 
@@ -526,7 +584,7 @@
 
           <div class="footer-version-tag">
             <i class="fas fa-code-branch text-emerald"></i>
-            <span>v1.0.6 (updated 2026-09-02 18:20)</span>
+            <span>v1.0.7 (updated 2026-09-10 17:30)</span>
           </div>
         </div>
 

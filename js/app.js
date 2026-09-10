@@ -129,6 +129,11 @@
     shortcutsModal: document.getElementById('shortcuts-modal'),
     shortcutsCloseBtn: document.getElementById('shortcuts-close-btn'),
     shortcutsDoneBtn: document.getElementById('shortcuts-done-btn'),
+        // NurulQuran Visual Enhancements DOM
+    exhibitsDropdownBtn: document.getElementById('exhibits-dropdown-btn'),
+    exhibitsDropdownMenu: document.getElementById('exhibits-dropdown-menu'),
+    nqArScaleBtn: document.getElementById('nq-ar-scale-btn'),
+    nqArScaleVal: document.getElementById('nq-ar-scale-val'),
     toastContainer: document.getElementById('toast-container')
   };
 
@@ -150,6 +155,38 @@
       .toLowerCase();
   }
 
+
+
+  // =========================================================================
+  // NURULQURAN SHOWCASE VISUAL HANDLERS (v1.0.7)
+  // =========================================================================
+  const AR_SCALES = [
+    { scale: '1.0', label: '1.0x' },
+    { scale: '1.2', label: '1.2x' },
+    { scale: '1.45', label: '1.4x' },
+    { scale: '1.8', label: '1.8x' }
+  ];
+
+  function cycleNqArabicScale() {
+    let currentScale = localStorage.getItem('100top_ar_zoom') || '1.2';
+    let idx = AR_SCALES.findIndex(s => s.scale === currentScale);
+    let nextIdx = (idx + 1) % AR_SCALES.length;
+    let next = AR_SCALES[nextIdx];
+
+    document.documentElement.style.setProperty('--ar-scale', next.scale);
+    localStorage.setItem('100top_ar_zoom', next.scale);
+    if (dom.nqArScaleVal) dom.nqArScaleVal.textContent = next.label;
+    showToast(`Arabic Calligraphy Scale: ${next.label}`);
+  }
+
+  function initNqArabicScale() {
+    let saved = localStorage.getItem('100top_ar_zoom') || '1.2';
+    document.documentElement.style.setProperty('--ar-scale', saved);
+    let found = AR_SCALES.find(s => s.scale === saved);
+    if (dom.nqArScaleVal && found) {
+      dom.nqArScaleVal.textContent = found.label;
+    }
+  }
 
   // =========================================================================
   // ARABIC FONT SCALER & RECITER CONTROLLERS
@@ -425,6 +462,7 @@
   function init() {
         applyTheme(state.theme);
     applyArabicFontScale(state.arabicFontScale);
+    initNqArabicScale();
     initReciterAndVolume();
     initCanvas();
     animateHeroNumbers();
@@ -1867,6 +1905,52 @@
       });
     }
 
+
+
+    // NurulQuran Exhibits Showcase Dropdown
+    if (dom.exhibitsDropdownBtn && dom.exhibitsDropdownMenu) {
+      dom.exhibitsDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dom.exhibitsDropdownMenu.classList.toggle('open');
+        dom.exhibitsDropdownBtn.classList.toggle('active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!dom.exhibitsDropdownMenu.contains(e.target) && e.target !== dom.exhibitsDropdownBtn) {
+          dom.exhibitsDropdownMenu.classList.remove('open');
+          dom.exhibitsDropdownBtn.classList.remove('active');
+        }
+      });
+
+      dom.exhibitsDropdownMenu.addEventListener('click', (e) => {
+        const item = e.target.closest('.dropdown-item');
+        if (!item) return;
+        const domain = item.getAttribute('data-filter-domain');
+        dom.exhibitsDropdownMenu.classList.remove('open');
+        dom.exhibitsDropdownBtn.classList.remove('active');
+
+        if (domain === 'reservations') {
+          switchTab('reservations', true);
+        } else {
+          switchTab('concepts', true);
+          // Find category button matching domain
+          const catBtn = Array.from(document.querySelectorAll('.category-chip')).find(chip => chip.textContent.includes(domain));
+          if (catBtn) {
+            catBtn.click();
+          } else {
+            state.searchQuery = domain;
+            if (dom.searchInput) dom.searchInput.value = domain;
+            renderCards();
+          }
+        }
+        showToast(`Navigated to: ${item.querySelector('.item-title').textContent}`);
+      });
+    }
+
+    // NurulQuran Arabic Scale Button
+    if (dom.nqArScaleBtn) {
+      dom.nqArScaleBtn.addEventListener('click', cycleNqArabicScale);
+    }
 
     // Top 20 New Event Listeners
     // 1. Font Scaler
