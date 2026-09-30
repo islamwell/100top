@@ -1,6 +1,6 @@
 name = "100top-islam-quran"
 compatibility_date = "2026-08-24"
-pages_build_output_dir = "."
 
-[site]
-bucket = "."
+# Cloudflare Pages serves the build output only (run `npm run build` first).
+# In the Pages dashboard set: Build command = "npm run build", Build output directory = "dist".
+pages_build_output_dir = "dist"

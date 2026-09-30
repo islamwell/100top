@@ -1,88 +1,70 @@
-# 100Top Islam & Quran: The Living Matrix (2026 Edition)
+# 100Top Islam & Quran: The Living Matrix
 
-An encyclopedic, next-generation 2026 interactive web application showcasing the **Top 200 Fundamental & Profound Dimensions of Islam and the Quran**, featuring real-time Arabic linguistic analysis, instant high-fidelity Quranic audio recitation, deep rational counter-arguments to the Top 20 reservations against Islam, and a private reflective journaling engine.
+An interactive, offline-capable encyclopedia of **200 dimensions of Islam and the Quran** across 10 domains, with Arabic roots, verse
+recitation, responses to 20 common reservations, a private reflection journal and spaced-repetition flashcards.
 
-![Version](https://img.shields.io/badge/version-1.0.7-gold.svg)
-![License](https://img.shields.io/badge/license-MIT-emerald.svg)
-![Platform](https://img.shields.io/badge/platform-Cloudflare%20Pages%20%7C%20GitHub-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
 
----
+## Features
 
-## 🌟 Key Features
+- **200 dimensions in 10 domains**: Arabic linguistics, Quranic sciences, theology, worship, tazkiyah, seerah, fiqh, civilization,
+  daily life and cosmology. Each has the Arabic term, root, overview, deep dive, cited verse and a practical takeaway.
+- **Search** across titles, tags, verses and surah names. Arabic works with or without diacritics, roots can be typed as
+  `S-L-M` / `k t b`, and `#42` jumps to an item.
+- **Recitation** of every cited verse from five reciters via EveryAyah. Multi-verse passages play through in order, with loop and
+  continuous modes, speed and volume controls, and lock-screen controls through the Media Session API.
+- **Top 20 reservations**, each with a response, a supporting verse and a permanent link (`/r/<id>/`).
+- **Reflection journal** with 15 prompts. Notes autosave locally and never leave the device. Export as Markdown, or back up and
+  restore bookmarks, notes and flashcard progress as JSON.
+- **Flashcards** with Leitner spaced repetition (Again / Good / Easy), due/new/mastered stats, per-domain decks and a reverse mode.
+- **Deep links** (`#dim-42`, `#res-3`, `#flashcards`), keyboard shortcuts (press `?`), three themes, and four Arabic text sizes.
+- **PWA**: installable, and works offline after the first visit.
+- **Crawlable**: a static HTML page for every dimension and reservation, plus `sitemap.xml` and Open Graph tags.
 
-### 1. 📖 The 200 Core Dimensions Matrix
-- **10 Interconnected Domains**:
-  1. **Arabic Linguistics & Grammar** (Syntax/Nahw, Morphology/Sarf, Balaghah, Roots/Ishtiqaaq, Iltifat, I'rab...)
-  2. **Quranic Sciences & Memorization** (Hifz, Tajweed, Tafsir, Qira'at, Asbab al-Nuzul, I'jaz, Rasm...)
-  3. **Theology & Creed (Aqeedah)** (Tawhid, Divine Names, Fitrah, Angels, Scriptures, Prophethood, Qadar, Afterlife...)
-  4. **Pillars & Acts of Worship (Ibadat)** (Salah, Adhan, Wudu, Tahajjud, Zakah, Ramadan Fasting, Hajj, Umrah, Tawaf...)
-  5. **Spiritual Purification & Ethics (Tazkiyah & Akhlaq)** (Ikhlas, Sabr, Shukr, Tawakkul, Tawbah, Khushu, Ihsan, Haya...)
-  6. **Prophetic History & Seerah** (Prophetic Biography, Isra & Mi'raj, Hijrah, Ulul 'Azm Prophets, Maryam, Ashab al-Kahf...)
-  7. **Jurisprudence & Ethics (Fiqh & Maqasid)** (5 Higher Objectives of Shariah, Usul al-Fiqh, Halal/Tayyib, Islamic Finance...)
-  8. **Islamic Civilization & Sciences** (Golden Age, Bayt al-Hikmah, Algebra, Optics, Medicine, Astronomy, Al-Qarawiyyin...)
-  9. **Contemporary Daily Life & Well-Being** (Digital Ethics, Parents, Sleep Sunnahs, Mindful Eating, Mental Health, Work Mastery...)
-  10. **Cosmology & Signs in Nature (Ayat al-Afaq)** (Cosmic Orbits, Expanding Universe, Water Cycle, Ocean Waves, Embryology...)
-- Each dimension features Arabic calligraphy, root breakdown, comprehensive explanation, 2026 practical takeaway, and Quranic verse citation.
+## Sources
 
-### 2. 🎙️ Live Quranic Recitation Engine
-- Instant audio playback for every cited verse streamed directly from high-fidelity CDN recitations (Sheikh Mishary Rashid Alafasy).
-- Global floating audio controller with seekbar, duration tracking, playback speed selector (0.75x to 1.5x), and continuous auto-play.
+- English translations: Saheeh International. Arabic text and translations are checked with `npm run verify:quran` against
+  the [Quran.com API](https://api-docs.quran.com). Passages that span several verses record `ayahEnd`.
+- Audio: [EveryAyah.com](https://everyayah.com). Uthmani font: King Fahd Complex, served by [Quran Foundation](https://quran.foundation).
+- Icons: [Font Awesome Free](https://fontawesome.com/license/free) (CC BY 4.0), bundled at build time as an inline SVG sprite.
 
-### 3. 🛡️ Top 20 Reservations & Deep Counter-Arguments
-- Thorough, rational, intellectual, and compassionate counter-arguments addressing common questions:
-  - The Problem of Evil and Suffering
-  - Science & Empirical Compatibility
-  - Status and Dignity of Women in Islam
-  - Pure Monotheism (Tawhid) vs Trinity/Polytheism
-  - Textual Preservation of the Quran
-  - Predestination (Qadar) vs Free Will
-  - Why God Commands Worship
-  - Shariah & Modernity
-  - Objective Morality vs Moral Relativism
-  - Warfare and Peace in Historical Context
-  - Faith vs Reason
-  - Evidences of Prophethood
-  - Separation of Culture from Pure Islam
-  - Fear of Converting and Social Stigma
-  - Psychology of Daily Rituals
-  - The Moral Logic of the Afterlife
+This is an educational overview, not a religious ruling. Consult qualified scholars on personal matters.
 
-### 4. ✍️ Reflective Inquiries & Personal Journal
-- 15 deep self-introspection prompts with guided questions.
-- Integrated private journal auto-saved to device `localStorage` with a single-click Markdown export.
+## Development
 
-### 5. 🎴 Active Recall Flashcard Hub
-- 3D interactive flashcards with flip animations, shuffle mode, and keyboard navigation (Space to flip, Arrow keys to navigate).
+Requires Node 20+.
 
-### 6. ✨ 2026 X-Factor Design
-- Luxury Emerald & Gold Glassmorphism design with Dark Emerald, Midnight OLED, and Warm Light Sand themes.
-- Canvas sacred geometry particle constellation animation.
-- Instant search and category filter pills with live counters.
-- Footer semantic versioning: `v1.0.7 (updated 2026-09-10 17:30)`.
-
----
-
-## 🚀 Deployment & Local Setup
-
-### Local Preview
-Simply open `index.html` in any modern web browser or serve with a lightweight local server:
 ```bash
-# Python 3
-python3 -m http.server 8080
-
-# Or npx serve
-npx serve .
+npm install
+npm run preview        # build to dist/ and serve at http://localhost:8080
+npm run check          # lint + unit tests + build
+npm run verify:quran   # check every cited verse against Quran.com (network)
+npm run icons          # regenerate PNG icons in src/assets/icons
 ```
 
-### Cloudflare Pages Deployment
-1. Connect your repository to **Cloudflare Pages**.
-2. Set Build Output directory to `.` (root).
-3. Deploy! Or use Wrangler CLI:
+| Path                 | Purpose                                                                                                                       |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `src/index.html`     | App shell (`{{icon:name}}` placeholders become SVG at build time)                                                             |
+| `src/js/`            | ES modules: `main` (boot, tabs, routing), `catalog`, `detail`, `audio`, `flashcards`, `srs`, `journal`, `backup`, `search`, … |
+| `src/data/data.json` | All content, checked by `scripts/validate-data.mjs` on every build                                                            |
+| `src/sw.js`          | Service worker (precached app shell, cached fonts, network-first pages)                                                       |
+| `scripts/build.mjs`  | Build `src/` into `dist/`: version stamping, cache-busting `?v=` hashes, icon sprite, static pages, sitemap                   |
+| `tests/`             | Vitest unit tests                                                                                                             |
+
+To add or edit content, change `src/data/data.json`, then run `npm run check` and `npm run verify:quran`.
+
+## Deployment (Cloudflare Pages)
+
+Set **Build command** to `npm run build` and **Build output directory** to `dist`, or deploy manually:
+
 ```bash
-npx wrangler pages deploy . --project-name 100top-islam-quran
+SITE_URL=https://your-domain.example npm run build
+npx wrangler pages deploy dist --project-name 100top-islam-quran
 ```
 
----
+`SITE_URL` sets the canonical, Open Graph and sitemap URLs (default: `https://100top-islam-quran.pages.dev`). Security headers,
+including a strict Content-Security-Policy, and cache rules are in `src/_headers`.
 
-## 📜 License
-Open-Source Educational Project under the MIT License. Built for humanity.
+## License
+
+MIT. Educational, open-source project.

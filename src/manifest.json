@@ -1,0 +1,25 @@
+{
+  "name": "100Top Islam & Quran · The Living Matrix",
+  "short_name": "100Top Islam",
+  "description": "200 dimensions of Islam and the Quran: Arabic linguistics, recitation audio, theology, civilization, reflections and flashcards.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050f0d",
+  "theme_color": "#050f0d",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Flashcards", "url": "./#flashcards" },
+    { "name": "Reflection Journal", "url": "./#questions" },
+    { "name": "Top 20 Reservations", "url": "./#reservations" }
+  ],
+  "categories": ["education", "books", "reference"]
+}

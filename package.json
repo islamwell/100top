@@ -1,0 +1,31 @@
+{
+  "name": "100top-islam-quran",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Top 200 Dimensions of Islam & the Quran: an interactive, offline-capable encyclopedia.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/build.mjs && node scripts/serve.mjs",
+    "serve": "node scripts/serve.mjs",
+    "icons": "node scripts/make-icons.mjs",
+    "verify:quran": "node scripts/verify-quran.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "check": "npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@fortawesome/fontawesome-free": "7.3.1",
+    "eslint": "10.11.0",
+    "globals": "17.12.0",
+    "prettier": "3.9.9",
+    "vitest": "5.0.2"
+  }
+}

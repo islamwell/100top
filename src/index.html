@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en" data-theme="emerald" data-arabic-scale="md">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>100Top Islam &amp; Quran · The Living Matrix (2026 Edition)</title>
+    <meta
+      name="description"
+      content="An interactive encyclopedia of 200 dimensions of Islam and the Quran: Arabic linguistics, Quranic recitation, theology, worship, history, answers to 20 common reservations, a private reflection journal and spaced-repetition flashcards."
+    />
+    <link rel="canonical" href="__SITE_URL__/" />
+
+    <!-- Social previews -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="100Top Islam &amp; Quran" />
+    <meta property="og:title" content="100Top Islam &amp; Quran · The Living Matrix" />
+    <meta
+      property="og:description"
+      content="200 dimensions of Islam and the Quran with Arabic roots, recitation audio, answers to common reservations and study tools."
+    />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_URL__/assets/icons/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Apply saved theme before first paint -->
+    <script src="js/boot.js?v=__BUILD_ID__"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      href="https://verses.quran.foundation/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Outfit:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json?v=__BUILD_ID__" />
+    <meta name="theme-color" content="#050f0d" />
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/icons/icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="100Top Islam" />
+
+    <link rel="stylesheet" href="css/style.css?v=__BUILD_ID__" />
+    <link rel="preload" href="data/data.json?v=__BUILD_ID__" as="fetch" crossorigin />
+    <script type="module" src="js/main.js?v=__BUILD_ID__"></script>
+  </head>
+  <body>
+    <!-- ICON_SPRITE -->
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div class="bg-canvas-wrap" aria-hidden="true">
+      <div class="aurora-orb orb-1"></div>
+      <div class="aurora-orb orb-2"></div>
+      <div class="aurora-orb orb-3"></div>
+    </div>
+    <div class="geometric-grid" aria-hidden="true"></div>
+    <div class="grain-overlay" aria-hidden="true"></div>
+    <canvas id="canvas-bg" aria-hidden="true"></canvas>
+
+    <div class="app-container">
+      <header class="navbar">
+        <div class="nav-content">
+          <a href="./" class="brand-logo" aria-label="100Top Islam, back to top">
+            <span class="brand-icon" aria-hidden="true">{{icon:kaaba}}</span>
+            <span class="brand-name">
+              <span
+                ><span class="gradient-text-gold">100Top</span><span class="brand-word">Islam</span
+                ><span class="brand-badge">2026</span></span
+              >
+              <span class="brand-tagline">The Living Matrix</span>
+            </span>
+          </a>
+
+          <nav class="nav-tabs-wrapper" aria-label="Sections">
+            <div class="nav-tabs" role="tablist">
+              <button
+                type="button"
+                class="nav-tab-btn active"
+                role="tab"
+                id="tabbtn-concepts"
+                data-tab="concepts"
+                aria-selected="true"
+                aria-controls="tab-concepts"
+              >
+                {{icon:wand-magic-sparkles text-gold}}<span><span data-count="items">200</span> Dimensions</span>
+              </button>
+              <button
+                type="button"
+                class="nav-tab-btn"
+                role="tab"
+                id="tabbtn-reservations"
+                data-tab="reservations"
+                aria-selected="false"
+                aria-controls="tab-reservations"
+                tabindex="-1"
+              >
+                {{icon:shield-halved text-emerald}}<span>Top <span data-count="reservations">20</span> Reservations</span>
+              </button>
+              <button
+                type="button"
+                class="nav-tab-btn"
+                role="tab"
+                id="tabbtn-questions"
+                data-tab="questions"
+                aria-selected="false"
+                aria-controls="tab-questions"
+                tabindex="-1"
+              >
+                {{icon:pen-nib text-gold}}<span>Inquiries &amp; Journal</span>
+              </button>
+              <button
+                type="button"
+                class="nav-tab-btn"
+                role="tab"
+                id="tabbtn-flashcards"
+                data-tab="flashcards"
+                aria-selected="false"
+                aria-controls="tab-flashcards"
+                tabindex="-1"
+              >
+                {{icon:layer-group text-emerald}}<span>Flashcards</span>
+              </button>
+            </div>
+          </nav>
+
+          <div class="nav-actions">
+            <div class="islam-dropdown-wrapper">
+              <button
+                type="button"
+                id="exhibits-dropdown-btn"
+                class="islam-dropdown-btn"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-controls="exhibits-dropdown-menu"
+              >
+                {{icon:compass}}<span>Exhibits</span>{{icon:chevron-down chevron-icon}}
+              </button>
+              <div id="exhibits-dropdown-menu" class="islam-dropdown-menu" role="menu" aria-labelledby="exhibits-dropdown-btn" hidden>
+                <p class="dropdown-header" aria-hidden="true">Interactive exhibits &amp; studies</p>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Arabic Linguistics & Grammar">
+                  <span class="item-badge">Linguistics · <span lang="ar">الجَذْر</span></span>
+                  <span class="item-title"><span lang="ar">شَجَرَةُ الجُذُور</span> · The Root Tree &amp; Morphology</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Quranic Sciences & Memorization">
+                  <span class="item-badge">Qur'an · <span lang="ar">الآيَات</span></span>
+                  <span class="item-title">The Signs: Sciences of the Qur'ān</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Prophetic History & Seerah">
+                  <span class="item-badge">Seerah · <span lang="ar">الرَّسُول</span></span>
+                  <span class="item-title">The Life of Muhammad ﷺ</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Spiritual Purification & Ethics (Tazkiyah)">
+                  <span class="item-badge">Tazkiyah · <span lang="ar">الرُّوح</span></span>
+                  <span class="item-title">Heart &amp; Soul: Inner Purification &amp; Taqwa</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Pillars & Acts of Worship (Ibadat)">
+                  <span class="item-badge">Worship · <span lang="ar">العِبَادَات</span></span>
+                  <span class="item-title">Pillars &amp; Acts of Worship</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-category="Theology & Creed (Aqeedah)">
+                  <span class="item-badge">Tawheed · <span lang="ar">شَهِدَ اللَّهُ</span></span>
+                  <span class="item-title">The Divine Testimony: Divine Oneness</span>
+                </button>
+                <button type="button" class="dropdown-item" role="menuitem" data-tab="reservations">
+                  <span class="item-badge">Apologetics · <span lang="ar">البَرَاهِين</span></span>
+                  <span class="item-title">Top <span data-count="reservations">20</span> Reservations &amp; Responses</span>
+                </button>
+              </div>
+            </div>
+            <button
+              type="button"
+              id="keyboard-shortcuts-btn"
+              class="btn-icon"
+              aria-label="Keyboard shortcuts"
+              title="Keyboard shortcuts (?)"
+            >
+              {{icon:keyboard}}
+            </button>
+            <button type="button" id="theme-toggle-btn" class="btn-icon" aria-label="Switch theme" title="Switch theme (T)">
+              {{icon:gem}}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="hero-section" aria-labelledby="hero-title">
+        <p class="bismillah-hero" lang="ar" dir="rtl">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+        <p class="hero-pill">
+          <span class="hero-pulse-dot" aria-hidden="true"></span>{{icon:star-and-crescent}}<span
+            >The Living Encyclopedic Matrix • 2026 Edition</span
+          >
+        </p>
+        <h1 class="hero-title" id="hero-title">
+          The Top <span class="gradient-text-gold"><span data-count="items">200</span> Dimensions</span> of
+          <span class="gradient-text-emerald">Islam &amp; The Quran</span>
+        </h1>
+        <p class="hero-subtitle">
+          An immersive exploration across Arabic grammar, Quranic recitation audio, theology, spiritual purification, Islamic civilization,
+          cosmology, rational responses to misconceptions, and transformative reflections.
+        </p>
+        <button type="button" class="hero-cta" id="hero-cta">{{icon:compass}}<span>Start Exploring</span>{{icon:arrow-right}}</button>
+
+        <ul class="hero-stats-grid">
+          <li>
+            <button type="button" class="stat-chip" data-target-tab="concepts">
+              <span class="stat-number" data-stat="items">200</span><span class="stat-label">Core Dimensions</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="stat-chip" data-target-tab="concepts">
+              <span class="stat-number" data-stat="categories">10</span><span class="stat-label">Knowledge Domains</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="stat-chip" data-target-tab="reservations">
+              <span class="stat-number" data-stat="reservations">20</span><span class="stat-label">Reservations Answered</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="stat-chip" data-target-tab="audio" aria-label="Play or pause Quran recitation">
+              <span class="stat-number" data-stat="verses">200</span><span class="stat-label">Recited Verses</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="search-filter-section" aria-label="Search and filter dimensions">
+        <div class="search-filter-container">
+          <div class="search-row">
+            <div class="search-input-wrapper" role="search">
+              <label for="search-input" class="sr-only">Search dimensions</label>
+              {{icon:magnifying-glass search-icon}}
+              <input
+                type="search"
+                id="search-input"
+                class="search-input"
+                placeholder="Search titles, Arabic, roots (e.g. S-L-M), surahs, #42…"
+                autocomplete="off"
+                enterkeyhint="search"
+                aria-describedby="results-count"
+              />
+              <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Clear search" hidden>{{icon:xmark}}</button>
+            </div>
+
+            <div class="filter-actions">
+              <button type="button" id="btn-random-dimension" class="btn-filter-toggle" title="Random dimension (R)">
+                {{icon:dice text-gold}}<span>Surprise Me</span>
+              </button>
+
+              <div class="font-scale-group" id="arabic-scale-group" role="group" aria-label="Arabic text size">
+                <button type="button" class="btn-font-scale" data-scale="sm" aria-pressed="false" aria-label="Small Arabic text">A−</button>
+                <button type="button" class="btn-font-scale" data-scale="md" aria-pressed="true" aria-label="Medium Arabic text">A</button>
+                <button type="button" class="btn-font-scale" data-scale="lg" aria-pressed="false" aria-label="Large Arabic text">A+</button>
+                <button type="button" class="btn-font-scale" data-scale="xl" aria-pressed="false" aria-label="Extra large Arabic text">
+                  A++
+                </button>
+              </div>
+
+              <button type="button" id="filter-bookmarks-btn" class="btn-filter-toggle" aria-pressed="false">
+                {{icon:bookmark-regular}}<span>Saved</span>
+              </button>
+
+              <div class="view-options" role="group" aria-label="Layout">
+                <button type="button" id="view-grid-btn" class="view-btn active" aria-pressed="true">{{icon:grip}} Grid</button>
+                <button type="button" id="view-list-btn" class="view-btn" aria-pressed="false">{{icon:list}} List</button>
+              </div>
+            </div>
+          </div>
+          <div class="categories-scroll" id="categories-container" role="group" aria-label="Filter by domain"></div>
+        </div>
+      </section>
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        <p id="app-status" class="app-status" role="status">Loading the encyclopedia…</p>
+        <noscript
+          ><p class="app-status">
+            This interactive encyclopedia needs JavaScript. You can still <a href="sitemap.xml">browse every dimension</a> as a static page.
+          </p></noscript
+        >
+
+        <section id="tab-concepts" class="tab-pane active" role="tabpanel" aria-labelledby="tabbtn-concepts">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">{{icon:compass text-gold}} Encyclopedic Catalog</h2>
+              <p id="results-count" class="section-subtitle" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+          <div id="cards-container" class="cards-grid"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <div class="empty-state-icon" aria-hidden="true">{{icon:magnifying-glass}}</div>
+            <h3 id="empty-state-title">No matching dimensions found</h3>
+            <p>Try a different keyword, clear the domain filter, or browse all dimensions.</p>
+          </div>
+        </section>
+
+        <section id="tab-reservations" class="tab-pane" role="tabpanel" aria-labelledby="tabbtn-reservations" hidden>
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">
+                {{icon:shield-halved text-emerald}} Top <span data-count="reservations">20</span> Reservations About Islam &amp; Responses
+              </h2>
+              <p class="section-subtitle">
+                Thoughtful, evidence-based responses to common philosophical, theological and social questions.
+              </p>
+            </div>
+          </div>
+          <div class="reservation-tools">
+            <div class="search-input-wrapper">
+              <label for="reservation-search" class="sr-only">Search reservations</label>
+              {{icon:filter search-icon}}
+              <input
+                type="search"
+                id="reservation-search"
+                class="search-input"
+                placeholder="Search reservations (e.g. suffering, science, women, free will)…"
+                autocomplete="off"
+              />
+            </div>
+            <div class="reservation-tools-row">
+              <span id="reservations-count" class="section-subtitle" role="status" aria-live="polite"></span>
+              <button type="button" id="btn-toggle-all-reservations" class="btn-filter-toggle" aria-pressed="false">
+                {{icon:arrows-up-down}}<span id="toggle-all-res-text">Expand All</span>
+              </button>
+            </div>
+          </div>
+          <div id="reservations-container" class="reservations-container"></div>
+          <p id="reservations-empty" class="empty-state" hidden>No reservations match your search.</p>
+        </section>
+
+        <section id="tab-questions" class="tab-pane" role="tabpanel" aria-labelledby="tabbtn-questions" hidden>
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">{{icon:pen-nib text-gold}} Reflective Inquiries &amp; Personal Journal</h2>
+              <p class="section-subtitle">
+                Questions for philosophical and spiritual introspection. Your notes stay on this device and are never uploaded.
+              </p>
+            </div>
+            <div class="journal-actions">
+              <button
+                type="button"
+                id="btn-backup-data"
+                class="btn-filter-toggle"
+                title="Download bookmarks, notes and flashcard progress as JSON"
+              >
+                {{icon:cloud-arrow-down}} Backup
+              </button>
+              <button type="button" id="btn-restore-data-trigger" class="btn-filter-toggle" title="Restore from a backup file">
+                {{icon:cloud-arrow-up}} Restore
+              </button>
+              <input type="file" id="restore-file-input" accept=".json,application/json" hidden />
+              <button type="button" id="export-journal-btn" class="btn-filter-toggle active">{{icon:download}} Export Journal (.md)</button>
+            </div>
+          </div>
+          <div id="questions-container" class="questions-container"></div>
+        </section>
+
+        <section id="tab-flashcards" class="tab-pane" role="tabpanel" aria-labelledby="tabbtn-flashcards" hidden>
+          <div class="section-header section-header-center">
+            <div>
+              <h2 class="section-title">{{icon:layer-group text-emerald}} Active Recall Flashcards</h2>
+              <p class="section-subtitle">Spaced repetition: grade each card and it returns just before you would forget it.</p>
+            </div>
+          </div>
+
+          <div class="flashcard-studio-header">
+            <div class="fc-field">
+              <label for="flash-category-select">Deck</label>
+              <select id="flash-category-select" class="flashcard-category-select"></select>
+            </div>
+            <div class="fc-field">
+              <label for="flash-mode-select">Study</label>
+              <select id="flash-mode-select" class="flashcard-category-select">
+                <option value="due">Due &amp; new cards</option>
+                <option value="all">All cards in order</option>
+                <option value="shuffle">All cards shuffled</option>
+              </select>
+            </div>
+            <button
+              type="button"
+              id="btn-flash-mode-toggle"
+              class="btn-filter-toggle"
+              aria-pressed="false"
+              title="Swap question and answer sides"
+            >
+              {{icon:repeat}}<span id="flash-mode-label">Term → Meaning</span>
+            </button>
+          </div>
+
+          <div class="flashcards-container">
+            <div id="flashcard-stats" class="flashcard-stats"></div>
+            <div class="flashcard-progress-bar-wrap" aria-hidden="true">
+              <div id="flashcard-progress-bar" class="flashcard-progress-bar-fill"></div>
+            </div>
+
+            <div id="flashcard-wrapper" class="flashcard-wrapper">
+              <div id="flashcard-front" class="flashcard-face flashcard-front"></div>
+              <div id="flashcard-back" class="flashcard-face flashcard-back" aria-hidden="true"></div>
+            </div>
+            <p id="flashcard-live" class="sr-only" role="status" aria-live="polite"></p>
+
+            <p class="flashcard-counter">Card <span id="flashcard-current-num">1</span> of <span id="flashcard-total-num">0</span></p>
+
+            <div id="flash-grade-group" class="flash-grade-group" role="group" aria-label="How well did you recall it?" hidden>
+              <button type="button" class="btn-grade grade-again" data-grade="again">
+                Again <kbd>A</kbd><span class="grade-hint"></span>
+              </button>
+              <button type="button" class="btn-grade grade-good" data-grade="good">
+                Good <kbd>G</kbd><span class="grade-hint"></span>
+              </button>
+              <button type="button" class="btn-grade grade-easy" data-grade="easy">
+                Easy <kbd>E</kbd><span class="grade-hint"></span>
+              </button>
+            </div>
+
+            <div class="flashcard-controls-hub">
+              <button type="button" id="flash-prev-btn" class="btn-flash-action" aria-label="Previous card">
+                {{icon:arrow-left}}<span>Prev</span>
+              </button>
+              <button type="button" id="flash-flip-btn" class="btn-flash-action btn-flash-flip" aria-pressed="false">
+                {{icon:rotate}}<span>Flip / Reveal</span>
+              </button>
+              <button type="button" id="flash-next-btn" class="btn-flash-action" aria-label="Next card">
+                <span>Next</span>{{icon:arrow-right}}
+              </button>
+            </div>
+            <p class="flashcard-help">{{icon:keyboard}} Space flips · ← → navigate · A / G / E grade the revealed card</p>
+          </div>
+        </section>
+
+        <section class="quotes-carousel-wrapper" aria-label="Wisdom quotes">
+          <div class="quote-card">
+            <div id="quote-carousel-box" aria-live="polite"></div>
+            <div class="quote-controls">
+              <button type="button" id="quote-prev-btn" class="btn-icon btn-icon-sm" aria-label="Previous quote">
+                {{icon:chevron-left}}
+              </button>
+              <button type="button" id="quote-next-btn" class="btn-icon btn-icon-sm" aria-label="Next quote">{{icon:chevron-right}}</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="master-footer">
+        <div class="footer-content">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <p class="footer-title"><span class="gradient-text-gold">100Top</span> Islam &amp; Quran · The Living Matrix</p>
+              <p class="footer-desc">
+                An open-access educational project presenting core dimensions of Islamic thought, Arabic linguistics and Quranic revelation.
+              </p>
+              <p class="footer-desc footer-credits">
+                English verse translations: <span data-translation>Saheeh International</span>. Recitation audio streamed from
+                <a href="https://everyayah.com" rel="noopener" target="_blank">EveryAyah.com</a>. Uthmani font by the King Fahd Glorious
+                Quran Printing Complex via <a href="https://quran.foundation" rel="noopener" target="_blank">Quran Foundation</a>. Icons by
+                <a href="https://fontawesome.com" rel="noopener" target="_blank">Font Awesome</a> (CC BY 4.0).
+              </p>
+              <p class="footer-desc footer-credits">
+                This is an educational overview, not a religious ruling (fatwa). For guidance on personal matters, consult qualified
+                scholars.
+              </p>
+            </div>
+            <p class="footer-version-tag">{{icon:code-branch text-emerald}}<span>v__VERSION__ · updated __BUILD_DATE__</span></p>
+          </div>
+          <div class="footer-bottom">
+            <p>© 2026 100Top Islam &amp; Quran. Open-source educational initiative.</p>
+            <ul class="footer-links">
+              <li><a href="#concepts">Dimensions</a></li>
+              <li><a href="#reservations">Reservations</a></li>
+              <li><a href="#questions">Journal</a></li>
+              <li><a href="#flashcards">Flashcards</a></li>
+              <li><a href="sitemap.xml">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Sticky Quran audio player -->
+    <section id="audio-player-bar" class="audio-player-bar minimized" aria-label="Quran recitation player" inert>
+      <div class="audio-bar-content">
+        <div class="audio-track-info">
+          <div class="audio-track-badge" aria-hidden="true">
+            <div class="audio-eq" id="audio-eq-bars" hidden><span></span><span></span><span></span><span></span></div>
+            <span id="audio-badge-icon">{{icon:volume-high}}</span>
+          </div>
+          <div class="audio-track-text" aria-live="polite">
+            <p id="audio-surah-name" class="audio-track-surah">Surah Al-Fatihah</p>
+            <p id="audio-verse-ref" class="audio-track-verse">Verse 1:1</p>
+            <p id="audio-arabic-snippet" class="audio-arabic-snippet font-arabic" lang="ar" dir="rtl"></p>
+          </div>
+        </div>
+
+        <div class="audio-controls-center">
+          <div class="audio-btn-row">
+            <button type="button" id="audio-prev-btn" class="btn-audio-sub" aria-label="Previous verse">{{icon:backward-step}}</button>
+            <button type="button" id="audio-play-btn" class="btn-audio-main" aria-label="Play recitation">{{icon:play}}</button>
+            <button type="button" id="audio-next-btn" class="btn-audio-sub" aria-label="Next verse">{{icon:forward-step}}</button>
+          </div>
+          <div class="audio-timeline-box">
+            <span id="audio-current-time" class="audio-time-label">0:00</span>
+            <input type="range" id="audio-seek-bar" class="audio-seek-bar" value="0" min="0" max="100" step="0.1" aria-label="Seek" />
+            <span id="audio-duration" class="audio-time-label">0:00</span>
+          </div>
+        </div>
+
+        <div class="audio-extra-controls">
+          <label for="audio-reciter-select" class="sr-only">Reciter</label>
+          <select id="audio-reciter-select" class="audio-reciter-select"></select>
+          <button type="button" id="audio-repeat-btn" class="btn-audio-sub btn-audio-repeat" aria-label="Repeat mode">
+            {{icon:repeat}}
+          </button>
+          <div class="audio-volume-wrap">
+            <button type="button" id="audio-volume-btn" class="btn-audio-sub" aria-label="Mute" aria-pressed="false">
+              {{icon:volume-high}}
+            </button>
+            <input
+              type="range"
+              id="audio-volume-slider"
+              class="audio-volume-slider"
+              min="0"
+              max="1"
+              step="0.05"
+              value="1"
+              aria-label="Volume"
+            />
+          </div>
+          <label for="audio-speed-select" class="sr-only">Playback speed</label>
+          <select id="audio-speed-select" class="speed-select">
+            <option value="0.75">0.75×</option>
+            <option value="1" selected>1× (normal)</option>
+            <option value="1.25">1.25×</option>
+            <option value="1.5">1.5×</option>
+          </select>
+          <button type="button" id="audio-close-btn" class="btn-audio-sub" aria-label="Stop and hide player">{{icon:chevron-down}}</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dimension deep-dive dialog -->
+    <div id="modal-overlay" class="modal-overlay" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close">{{icon:xmark}}</button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <!-- Keyboard shortcuts dialog -->
+    <div id="shortcuts-modal" class="modal-overlay" hidden>
+      <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title" tabindex="-1">
+        <button type="button" class="modal-close-btn" aria-label="Close" data-close-shortcuts>{{icon:xmark}}</button>
+        <div class="shortcuts-head">
+          <span class="brand-icon brand-icon-sm" aria-hidden="true">{{icon:keyboard}}</span>
+          <h2 id="shortcuts-title" class="shortcuts-title">Keyboard Shortcuts</h2>
+        </div>
+        <dl class="shortcuts-grid">
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Flip flashcard / play or pause audio</dt>
+            <dd><kbd>Space</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Next card (Flashcards) / next quote</dt>
+            <dd><kbd>→</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Previous card / previous quote</dt>
+            <dd><kbd>←</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Grade card: Again / Good / Easy</dt>
+            <dd><kbd>A</kbd> <kbd>G</kbd> <kbd>E</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Focus search</dt>
+            <dd><kbd>/</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Random dimension</dt>
+            <dd><kbd>R</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Cycle themes</dt>
+            <dd><kbd>T</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Mute / unmute audio</dt>
+            <dd><kbd>M</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Tabs: Catalog, Reservations, Journal, Flashcards</dt>
+            <dd><kbd>1</kbd>–<kbd>4</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Close dialog / clear search</dt>
+            <dd><kbd>Esc</kbd></dd>
+          </div>
+          <div class="shortcut-item">
+            <dt class="shortcut-label">Show this help</dt>
+            <dd><kbd>?</kbd></dd>
+          </div>
+        </dl>
+        <div class="shortcuts-foot"><button type="button" class="btn-flash-action" data-close-shortcuts>Got it</button></div>
+      </div>
+    </div>
+
+    <button type="button" id="back-to-top-btn" class="back-to-top-btn" aria-label="Back to top" tabindex="-1">{{icon:arrow-up}}</button>
+    <div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+  </body>
+</html>

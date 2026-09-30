@@ -1,78 +1,67 @@
-/**
- * 100Top Islam & Quran: The Living Matrix (2026 Edition)
- * Comprehensive structured data for 200 Core Dimensions, Audio, Top 20 Reservations & Inquiries
- */
-const APP_DATA = {
-  "version": "v1.0.7",
-  "updated": "2026-09-10 17:30",
+{
   "appName": "100Top Islam & Quran: The Living Matrix (2026 Edition)",
   "subtitle": "200 Foundational Dimensions, Linguistic Gems, Quran Audio Recitations, Top 20 Reservations & Philosophical Inquiries",
+  "translation": "Saheeh International",
   "categories": [
-    {
-      "id": "all",
-      "name": "All 200 Dimensions",
-      "icon": "sparkles",
-      "count": 200
-    },
     {
       "id": "Arabic Linguistics & Grammar",
       "name": "Arabic Linguistics & Grammar",
-      "icon": "book-open",
-      "count": 20
+      "short": "Arabic Linguistics",
+      "color": "#4f8ef7"
     },
     {
       "id": "Quranic Sciences & Memorization",
       "name": "Quranic Sciences & Memorization",
-      "icon": "scroll",
-      "count": 20
+      "short": "Quranic Sciences",
+      "color": "#a78bfa"
     },
     {
       "id": "Theology & Creed (Aqeedah)",
       "name": "Theology & Creed (Aqeedah)",
-      "icon": "shield",
-      "count": 20
+      "short": "Theology",
+      "color": "#f59e0b"
     },
     {
       "id": "Pillars & Acts of Worship (Ibadat)",
       "name": "Pillars & Acts of Worship (Ibadat)",
-      "icon": "heart-handshake",
-      "count": 20
+      "short": "Pillars & Worship",
+      "color": "#10b981"
     },
     {
       "id": "Spiritual Purification & Ethics (Tazkiyah)",
       "name": "Spiritual Purification & Ethics (Tazkiyah)",
-      "icon": "flame",
-      "count": 20
+      "short": "Spiritual Purification",
+      "color": "#ec4899"
     },
     {
       "id": "Prophetic History & Seerah",
       "name": "Prophetic History & Seerah",
-      "icon": "compass",
-      "count": 20
+      "short": "Prophetic History",
+      "color": "#f97316"
     },
     {
       "id": "Jurisprudence & Ethics (Fiqh & Maqasid)",
       "name": "Jurisprudence & Ethics (Fiqh & Maqasid)",
-      "icon": "scale",
-      "count": 20
+      "short": "Jurisprudence",
+      "color": "#06b6d4"
     },
     {
       "id": "Islamic Civilization & Sciences",
       "name": "Islamic Civilization & Sciences",
-      "icon": "landmark",
-      "count": 20
+      "short": "Islamic Civilization",
+      "color": "#8b5cf6"
     },
     {
       "id": "Contemporary Daily Life & Well-Being",
       "name": "Contemporary Daily Life & Well-Being",
-      "icon": "sun",
-      "count": 20
+      "short": "Daily Life",
+      "color": "#22c55e"
     },
     {
       "id": "Cosmology & Signs in Nature (Ayat al-Afaq)",
       "name": "Cosmology & Signs in Nature (Ayat al-Afaq)",
-      "icon": "globe",
-      "count": 20
+      "short": "Cosmology",
+      "color": "#38bdf8"
     }
   ],
   "items": [
@@ -767,7 +756,8 @@ const APP_DATA = {
         "surahName": "Al-Buruj",
         "textArabic": "بَلْ هُوَ قُرْآنٌ مَّجِيدٌ فِي لَوْحٍ مَّحْفُوظٍ",
         "textEnglish": "But this is an honored Quran, [inscribed] in a Preserved Tablet.",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/085021.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/085021.mp3",
+        "ayahEnd": 22
       },
       "quote": "The physical script of the Mushaf was engineered with such foresight that a single inscription could authentically house multiple oral readings.",
       "tags": [
@@ -1260,7 +1250,7 @@ const APP_DATA = {
         "ayah": 18,
         "surahName": "Qaf",
         "textArabic": "مَّا يَلْفِظُ مِن قَوْلٍ إِلَّا لَدَيْهِ رَقِيبٌ عَتِيدٌ",
-        "textEnglish": "Man does not utter any word except that with him is an observer prepared.",
+        "textEnglish": "Man does not utter any word except that with him is an observer prepared [to record].",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/050018.mp3"
       },
       "quote": "Belief in angels reminds humanity that the visible material universe is merely the front porch of a vast, unseen cosmos.",
@@ -1338,7 +1328,7 @@ const APP_DATA = {
         "ayah": 49,
         "surahName": "Al-Qamar",
         "textArabic": "إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ",
-        "textEnglish": "Indeed, all things We created with predestined measure.",
+        "textEnglish": "Indeed, all things We created with predestination.",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/054049.mp3"
       },
       "quote": "Qadar is the ultimate shield against despair: it turns past regrets into peace and future anxieties into purposeful action.",
@@ -1988,7 +1978,7 @@ const APP_DATA = {
         "ayah": 112,
         "surahName": "At-Tawbah",
         "textArabic": "التَّائِبُونَ الْعَابِدُونَ الْحَامِدُونَ السَّائِحُونَ الرَّاكِعُونَ السَّاجِدُونَ",
-        "textEnglish": "[Such believers are] the repentant, the worshipers, the praisers [of Allah], the travelers [for His cause / fasters]...",
+        "textEnglish": "[Such believers are] the repentant, the worshipers, the praisers [of Allah], the travelers [for His cause]...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/009112.mp3"
       },
       "quote": "Fasting outside of obligation is a love letter written to God with the ink of self-discipline.",
@@ -2066,7 +2056,7 @@ const APP_DATA = {
         "ayah": 29,
         "surahName": "Al-Hajj",
         "textArabic": "ثُمَّ لْيَقْضُوا تَفَثَهُمْ وَلْيُوفُوا نُذُورَهُمْ وَلْيَطَّوَّفُوا بِالْبَيْتِ الْعَتِيقِ",
-        "textEnglish": "Then let them complete their prescribed duties and fulfill their vows and perform Tawaf around the ancient House.",
+        "textEnglish": "Then let them end their untidiness and fulfill their vows and perform ṭawāf around the ancient House.",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/022029.mp3"
       },
       "quote": "In Tawaf, you become a single drop in a swirling cosmic river of praise, moving in harmony with the entire universe.",
@@ -2301,7 +2291,8 @@ const APP_DATA = {
         "surahName": "Al-Mu'minun",
         "textArabic": "قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ",
         "textEnglish": "Certainly will the believers have succeeded: They who are during their prayer humbly submissive.",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/023001.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/023001.mp3",
+        "ayahEnd": 2
       },
       "quote": "Khushu' is when the noisy storm of worldly thoughts falls silent before the majesty of God.",
       "tags": [
@@ -2638,7 +2629,7 @@ const APP_DATA = {
         "ayah": 18,
         "surahName": "Qaf",
         "textArabic": "مَّا يَلْفِظُ مِن قَوْلٍ إِلَّا لَدَيْهِ رَقِيبٌ عَتِيدٌ",
-        "textEnglish": "Man does not utter any word except that with him is an observer prepared.",
+        "textEnglish": "Man does not utter any word except that with him is an observer prepared [to record].",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/050018.mp3"
       },
       "quote": "A slip of the foot can fracture a bone, but a slip of the tongue can fracture a soul for eternity.",
@@ -2665,7 +2656,8 @@ const APP_DATA = {
         "surahName": "Ash-Shu'ara",
         "textArabic": "يَوْمَ لَا يَنفَعُ مَالٌ وَلَا بَنُونَ إِلَّا مَنْ أَتَى اللَّهَ بِقَلْبٍ سَلِيمٍ",
         "textEnglish": "The Day when there will not benefit [anyone] wealth or children, but only one who comes to Allah with a sound heart.",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/026088.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/026088.mp3",
+        "ayahEnd": 89
       },
       "quote": "To carry a grudge is like drinking poison and expecting the other person to die; purify your breast and live in freedom.",
       "tags": [
@@ -2768,7 +2760,7 @@ const APP_DATA = {
         "ayah": 1,
         "surahName": "Al-Fath",
         "textArabic": "إِنَّا فَتَحْنَا لَكَ فَتْحًا مُّبِينًا",
-        "textEnglish": "Indeed, We have given you, [O Muhammad], a clear conquest / manifest victory.",
+        "textEnglish": "Indeed, We have given you, [O Muhammad], a clear conquest.",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/048001.mp3"
       },
       "quote": "True strength is not measured by the violence of your sword, but by the strategic patience of your diplomacy.",
@@ -2924,7 +2916,7 @@ const APP_DATA = {
         "ayah": 120,
         "surahName": "An-Nahl",
         "textArabic": "إِنَّ إِبْرَاهِيمَ كَانَ أُمَّةً قَانِتًا لِّلَّهِ حَنِيفًا وَلَمْ يَكُ مِنَ الْمُشْرِكِينَ",
-        "textEnglish": "Indeed, Abraham was a comprehensive leader / an entire nation, devoutly obedient to Allah, inclining toward truth...",
+        "textEnglish": "Indeed, Abraham was a comprehensive leader, devoutly obedient to Allah, inclining toward truth, and he was not of those who associate others with Allah.",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/016120.mp3"
       },
       "quote": "Ibrahim was a single man who weighed as much as an entire nation because his heart belonged completely to God.",
@@ -3418,7 +3410,7 @@ const APP_DATA = {
         "ayah": 2,
         "surahName": "Al-Hashr",
         "textArabic": "فَاعْتَبِرُوا يَا أُولِي الْأَبْصَارِ",
-        "textEnglish": "...So take warning / reflect upon examples, O you who have insight.",
+        "textEnglish": "...So take warning, O people of vision.",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/059002.mp3"
       },
       "quote": "Qiyas is the bridge between ancient revelation and contemporary realities, allowing the eternal flame of Shariah to illuminate modern problems.",
@@ -3496,7 +3488,7 @@ const APP_DATA = {
         "ayah": 168,
         "surahName": "Al-Baqarah",
         "textArabic": "يَا أَيُّهَا النَّاسُ كُلُوا مِمَّا فِي الْأَرْضِ حَلَالًا طَيِّبًا",
-        "textEnglish": "O mankind, eat from whatever is on earth [that is] lawful and good / wholesome...",
+        "textEnglish": "O mankind, eat from whatever is on earth [that is] lawful and good...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/002168.mp3"
       },
       "quote": "Halal is what is permissible on your tongue; Tayyib is the ethical beauty of how it reached your plate.",
@@ -3522,7 +3514,7 @@ const APP_DATA = {
         "ayah": 157,
         "surahName": "Al-A'raf",
         "textArabic": "وَيُحِلُّ لَهُمُ الطَّيِّبَاتِ وَيُحَرِّمُ عَلَيْهِمُ الْخَبَائِثَ",
-        "textEnglish": "...and makes lawful for them the good things and prohibits for them the evil / harmful...",
+        "textEnglish": "...and makes lawful for them the good things and prohibits for them the evil...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/007157.mp3"
       },
       "quote": "Whatever God prohibited, He created a hundred wholesome alternatives in its place.",
@@ -3548,7 +3540,7 @@ const APP_DATA = {
         "ayah": 275,
         "surahName": "Al-Baqarah",
         "textArabic": "وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا",
-        "textEnglish": "...Allah has permitted trade and has forbidden interest / usury...",
+        "textEnglish": "...Allah has permitted trade and has forbidden interest...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/002275.mp3"
       },
       "quote": "Riba transfers wealth from the productive many to the idle few; Islam commands shared risk, honest trade, and ethical equity.",
@@ -3601,7 +3593,8 @@ const APP_DATA = {
         "surahName": "Al-Mutaffifin",
         "textArabic": "وَيْلٌ لِّلْمُطَفِّفِينَ الَّذِينَ إِذَا اكْتَالُوا عَلَى النَّاسِ يَسْتَوْفُونَ",
         "textEnglish": "Woe to those who give short measure, who, when they take a measure from people, take in full...",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/083001.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/083001.mp3",
+        "ayahEnd": 2
       },
       "quote": "A business built on honest scales and ethical contracts earns divine blessings (Barakah) that no fraudulent profit can match.",
       "tags": [
@@ -4328,7 +4321,7 @@ const APP_DATA = {
         "ayah": 36,
         "surahName": "An-Nisa",
         "textArabic": "وَالْجَارِ ذِي الْقُرْبَىٰ وَالْجَارِ الْجُنُبِ وَالصَّاحِبِ بِالْجَنبِ",
-        "textEnglish": "...and the neighbor who is near of kin, the neighbor who is a stranger, the companion at your side...",
+        "textEnglish": "...the near neighbor, the neighbor farther away, the companion at your side...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/004036.mp3"
       },
       "quote": "A peaceful neighborhood is the first building block of a healthy civilization; start by sharing warmth across your fence.",
@@ -4537,7 +4530,8 @@ const APP_DATA = {
         "surahName": "Al-'Asr",
         "textArabic": "وَالْعَصْرِ إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
         "textEnglish": "By time, indeed, mankind is in loss,",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/103001.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/103001.mp3",
+        "ayahEnd": 2
       },
       "quote": "Your life is nothing more than a specific count of breaths; every breath that leaves your chest is a piece of you that has departed forever.",
       "tags": [
@@ -4901,7 +4895,8 @@ const APP_DATA = {
         "surahName": "An-Naba",
         "textArabic": "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا وَالْجِبَالَ أَوْتَادًا",
         "textEnglish": "Have We not made the earth a resting place and the mountains as pegs?",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/078006.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/078006.mp3",
+        "ayahEnd": 7
       },
       "quote": "Mountains are like tectonic icebergs: what is visible on the surface is anchored by colossal roots plunged deep into the earth's crust.",
       "tags": [
@@ -4979,7 +4974,8 @@ const APP_DATA = {
         "surahName": "Ar-Rahman",
         "textArabic": "مَرَجَ الْبَحْرَيْنِ يَلْتَقِيَانِ بَيْنَهُمَا بَرْزَخٌ لَّا يَبْغِيَانِ",
         "textEnglish": "He released the two seas, meeting [side by side]; Between them is a barrier [which] neither of them transgresses -",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/055019.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/055019.mp3",
+        "ayahEnd": 20
       },
       "quote": "Two massive oceans meet and embrace, yet a subtle boundary of density preserves the unique identity of each sea.",
       "tags": [
@@ -5342,7 +5338,8 @@ const APP_DATA = {
         "surahName": "Al-Ikhlas",
         "textArabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
         "textEnglish": "Say, 'He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, Nor is there to Him any equivalent.'",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/112001.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/112001.mp3",
+        "ayahEnd": 4
       },
       "keyTakeaway": "Tawhid guarantees that no human being, statue, or institution can ever claim the absolute sovereignty belonging only to God."
     },
@@ -5376,7 +5373,8 @@ const APP_DATA = {
         "surahName": "Ash-Shams",
         "textArabic": "فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَاهَا ۝ قَدْ أَفْلَحَ مَن زَكَّاهَا ۝ وَقَدْ خَابَ مَن دَسَّاهَا",
         "textEnglish": "And [by the soul] and He who proportioned it, And inspired it [with discernment of] its wickedness and its righteousness, He has succeeded who purifies it, And he has failed who instills it [with corruption].",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/091008.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/091008.mp3",
+        "ayahEnd": 10
       },
       "keyTakeaway": "You are not responsible for the cards you were dealt in life, but you are 100% accountable for how you play your hand."
     },
@@ -5579,7 +5577,7 @@ const APP_DATA = {
         "ayah": 9,
         "surahName": "Al-Isra",
         "textArabic": "إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ",
-        "textEnglish": "Indeed, this Quran guides to that which is most suitable / upright...",
+        "textEnglish": "Indeed, this Quran guides to that which is most suitable...",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/017009.mp3"
       },
       "keyTakeaway": "Tools and technologies change across centuries, but the human soul's thirst for meaning remains eternal."
@@ -5614,7 +5612,8 @@ const APP_DATA = {
         "surahName": "Al-Qiyamah",
         "textArabic": "أَيَحْسَبُ الْإِنسَانُ أَلَّن نَّجْمَعَ عِظَامَهُ ۝ بَلَىٰ قَادِرِينَ عَلَىٰ أَن نُّسَوِّيَ بَنَانَهُ",
         "textEnglish": "Does man think that We will not assemble his bones? Yes. [We are] Able [even] to proportion his fingertips.",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/075003.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/075003.mp3",
+        "ayahEnd": 4
       },
       "keyTakeaway": "Death is not the extinguishing of your light; it is merely turning off the desk lamp because the eternal dawn has arrived."
     }
@@ -5826,7 +5825,8 @@ const APP_DATA = {
         "surahName": "Ash-Sharh",
         "textArabic": "فَإِذَا فَرَغْتَ فَانصَبْ ۝ وَإِلَىٰ رَبِّكَ فَارْغَب",
         "textEnglish": "So when you have finished [your duties], then stand up [for worship]. And to your Lord direct [your] longing.",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/094007.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/094007.mp3",
+        "ayahEnd": 8
       }
     },
     {
@@ -5845,7 +5845,8 @@ const APP_DATA = {
         "surahName": "Al-Fajr",
         "textArabic": "يَا أَيَّتُهَا النَّفْسُ الْمُطْمَئِنَّةُ ۝ ارْجِعِي إِلَىٰ رَبِّكِ رَاضِيَةً مَّرْضِيَّةً",
         "textEnglish": "[To the righteous it will be said], 'O reassured soul, Return to your Lord, well-pleased and pleasing [to Him]...'",
-        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/089027.mp3"
+        "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/089027.mp3",
+        "ayahEnd": 28
       }
     },
     {
@@ -5863,7 +5864,7 @@ const APP_DATA = {
         "ayah": 18,
         "surahName": "Qaf",
         "textArabic": "مَّا يَلْفِظُ مِن قَوْلٍ إِلَّا لَدَيْهِ رَقِيبٌ عَتِيدٌ",
-        "textEnglish": "Man does not utter any word except that with him is an observer prepared.",
+        "textEnglish": "Man does not utter any word except that with him is an observer prepared [to record].",
         "audioUrl": "https://everyayah.com/data/Alafasy_128kbps/050018.mp3"
       }
     },
@@ -5956,11 +5957,4 @@ const APP_DATA = {
       "source": "Philosophical Inquiries on Monotheism"
     }
   ]
-};
-
-if (typeof window !== 'undefined') {
-  window.APP_DATA = APP_DATA;
-}
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = APP_DATA;
 }
