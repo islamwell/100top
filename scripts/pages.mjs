@@ -38,7 +38,7 @@ function layout({ title, description, path, body, ctx, jsonLd }) {
 ${body}
     </main>
     <footer class="master-footer"><div class="footer-content"><div class="footer-bottom">
-      <p>© 2026 100Top Islam &amp; Quran · v${e(ctx.version)} · English translation: ${e(ctx.data.translation || '')}</p>
+      <p>© 2026 100Top Islam &amp; Quran · v${e(ctx.version)} (updated ${e(ctx.buildDate)}) · English translation: ${e(ctx.data.translation || '')}</p>
       <ul class="footer-links"><li><a href="../../">Home</a></li><li><a href="../../sitemap.xml">Sitemap</a></li></ul>
     </div></div></footer>
   </div>

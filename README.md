@@ -3,7 +3,7 @@
 An interactive, offline-capable encyclopedia of **200 dimensions of Islam and the Quran** across 10 domains, with Arabic roots, verse
 recitation, responses to 20 common reservations, a private reflection journal and spaced-repetition flashcards.
 
-![Version](https://img.shields.io/badge/version-1.1.0-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
+![Version](https://img.shields.io/badge/version-1.1.1-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
 
 ## Features
 

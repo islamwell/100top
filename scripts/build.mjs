@@ -43,7 +43,7 @@ async function main() {
   }
   hash.update(pkg.version);
   const BUILD_ID = hash.digest('hex').slice(0, 10);
-  const BUILD_DATE = new Date().toISOString().slice(0, 10);
+  const BUILD_DATE = new Date().toISOString().replace('T', ' ').slice(0, 16);
 
   const data = JSON.parse(await readFile(join(SRC, 'data/data.json'), 'utf8'));
   const problems = validateData(data);
@@ -109,7 +109,7 @@ async function main() {
 
   // ─── Static pages ───────────────────────────────────────────────────────
   const cssHref = `css/style.css?v=${BUILD_ID}`;
-  const ctx = { data, siteUrl: SITE_URL, cssHref, version: pkg.version };
+  const ctx = { data, siteUrl: SITE_URL, cssHref, version: pkg.version, buildDate: BUILD_DATE };
   for (const item of data.items) {
     const dir = join(DIST, 'd', String(item.id));
     await mkdir(dir, { recursive: true });
