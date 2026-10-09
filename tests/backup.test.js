@@ -6,7 +6,7 @@ const ctx = { itemIds: new Set([1, 2, 3]), questionIds: new Set(['q1', 'q2']) };
 describe('sanitizeBackup', () => {
   it('accepts a valid v2 backup', () => {
     const backup = createBackup({
-      version: '1.1.1',
+      version: '1.1.2',
       bookmarks: new Set([1, 3]),
       journalNotes: { q1: 'note' },
       srs: { 2: { box: 1, due: 1, reviews: 1, lapses: 0, last: 1 } },

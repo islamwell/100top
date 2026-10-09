@@ -35,4 +35,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found');
   }
-}).listen(PORT, '127.0.0.1', () => console.log(`Serving dist/ at http://localhost:${PORT}`));
+}).listen(PORT, () => console.log(`Serving dist/ at http://localhost:${PORT}`));
