@@ -1,6 +1,6 @@
 {
   "name": "100top-islam-quran",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "private": true,
   "description": "Top 200 Dimensions of Islam & the Quran: an interactive, offline-capable encyclopedia.",
   "type": "module",
@@ -12,6 +12,7 @@
     "build": "node scripts/build.mjs",
     "preview": "node scripts/build.mjs && node scripts/serve.mjs",
     "serve": "node scripts/serve.mjs",
+    "deploy": "node scripts/build.mjs && wrangler pages deploy dist --project-name 100top-islam-quran --branch main",
     "icons": "node scripts/make-icons.mjs",
     "verify:quran": "node scripts/verify-quran.mjs",
     "lint": "eslint .",

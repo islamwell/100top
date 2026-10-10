@@ -3,7 +3,7 @@
 An interactive, offline-capable encyclopedia of **200 dimensions of Islam and the Quran** across 10 domains, with Arabic roots, verse
 recitation, responses to 20 common reservations, a private reflection journal and spaced-repetition flashcards.
 
-![Version](https://img.shields.io/badge/version-1.1.2-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
+![Version](https://img.shields.io/badge/version-1.1.3-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
 
 ## Features
 
@@ -58,8 +58,10 @@ To add or edit content, change `src/data/data.json`, then run `npm run check` an
 Set **Build command** to `npm run build` and **Build output directory** to `dist`, or deploy manually:
 
 ```bash
-SITE_URL=https://your-domain.example npm run build
-npx wrangler pages deploy dist --project-name 100top-islam-quran
+npm run deploy         # build and deploy directly to Cloudflare Pages
+# or manually:
+SITE_URL=https://100top-islam-quran.pages.dev npm run build
+wrangler pages deploy dist --project-name 100top-islam-quran
 ```
 
 `SITE_URL` sets the canonical, Open Graph and sitemap URLs (default: `https://100top-islam-quran.pages.dev`). Security headers,
