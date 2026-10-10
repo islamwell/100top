@@ -555,6 +555,93 @@
       </div>
     </div>
 
+    <!-- Shareable visual card dialog -->
+    <div id="card-generator-modal" class="modal-overlay modal-overlay-card" hidden>
+      <div class="modal-card modal-card-generator" role="dialog" aria-modal="true" aria-labelledby="card-modal-title" tabindex="-1">
+        <button type="button" id="card-modal-close-btn" class="modal-close-btn" aria-label="Close">{{icon:xmark}}</button>
+        <div class="card-generator-header">
+          <div class="card-gen-header-left">
+            <span class="brand-icon brand-icon-sm" aria-hidden="true">{{icon:image}}</span>
+            <div>
+              <h2 id="card-modal-title" class="card-modal-title">Visual Share Card</h2>
+              <p class="card-modal-subtitle">Aesthetic high-res card for social media, WhatsApp and personal reflection.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-generator-body">
+          <div class="card-preview-column">
+            <div class="card-preview-wrapper" id="card-preview-wrapper">
+              <div class="card-preview-loader" id="card-preview-loader" hidden>
+                {{icon:rotate rotate-spin}}
+                <span>Rendering card…</span>
+              </div>
+              <img id="card-preview-img" class="card-preview-img" alt="Visual Card Preview" />
+            </div>
+            <div class="card-quick-nav">
+              <button type="button" id="btn-card-prev" class="btn-filter-toggle" aria-label="Previous dimension">
+                {{icon:arrow-left}} <span>Prev</span>
+              </button>
+              <span id="card-dimension-indicator" class="card-dimension-indicator">Dimension #001</span>
+              <button type="button" id="btn-card-next" class="btn-filter-toggle" aria-label="Next dimension">
+                <span>Next</span> {{icon:arrow-right}}
+              </button>
+            </div>
+          </div>
+
+          <div class="card-controls-column">
+            <div class="card-control-group">
+              <span class="card-control-label">{{icon:palette}} Aesthetic Style Preset</span>
+              <div class="card-theme-selector" role="radiogroup" aria-label="Card Theme Preset">
+                <button type="button" class="btn-card-theme active" data-theme="emerald" role="radio" aria-checked="true">
+                  <span class="theme-swatch swatch-emerald"></span>
+                  <span class="theme-info">
+                    <strong class="theme-name">Emerald Gold</strong>
+                    <span class="theme-desc">Lush Quranic green with radiant gold</span>
+                  </span>
+                  {{icon:check theme-check-icon}}
+                </button>
+                <button type="button" class="btn-card-theme" data-theme="midnight" role="radio" aria-checked="false">
+                  <span class="theme-swatch swatch-midnight"></span>
+                  <span class="theme-info">
+                    <strong class="theme-name">Midnight Sapphire</strong>
+                    <span class="theme-desc">Deep celestial navy with gold &amp; cyan</span>
+                  </span>
+                  {{icon:check theme-check-icon}}
+                </button>
+                <button type="button" class="btn-card-theme" data-theme="onyx" role="radio" aria-checked="false">
+                  <span class="theme-swatch swatch-onyx"></span>
+                  <span class="theme-info">
+                    <strong class="theme-name">Royal Onyx</strong>
+                    <span class="theme-desc">Obsidian charcoal with pure gold</span>
+                  </span>
+                  {{icon:check theme-check-icon}}
+                </button>
+              </div>
+            </div>
+
+            <div class="card-actions-group">
+              <button type="button" id="btn-card-download" class="btn-card-action btn-card-primary">
+                {{icon:download}} <span>Download PNG (1080×1080)</span>
+              </button>
+              <div class="card-actions-subrow">
+                <button type="button" id="btn-card-copy" class="btn-card-action btn-card-secondary" title="Copy PNG image to clipboard">
+                  {{icon:copy}} <span>Copy Image</span>
+                </button>
+                <button type="button" id="btn-card-share" class="btn-card-action btn-card-secondary" title="Share via native apps">
+                  {{icon:share-nodes}} <span>Share</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="card-info-tip">
+              {{icon:shield-halved text-emerald}} Free for personal study, dawah, and social sharing. Square 1:1 format optimized for Instagram, WhatsApp status, and X.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Keyboard shortcuts dialog -->
     <div id="shortcuts-modal" class="modal-overlay" hidden>
       <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title" tabindex="-1">

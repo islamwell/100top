@@ -43,7 +43,9 @@ async function main() {
   }
   hash.update(pkg.version);
   const BUILD_ID = hash.digest('hex').slice(0, 10);
-  const BUILD_DATE = new Date().toISOString().replace('T', ' ').slice(0, 16);
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const now = new Date();
+  const BUILD_DATE = `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())} ${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
 
   const data = JSON.parse(await readFile(join(SRC, 'data/data.json'), 'utf8'));
   const problems = validateData(data);

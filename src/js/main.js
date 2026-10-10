@@ -13,6 +13,7 @@ import { initQuotes, nextQuote, prevQuote } from './quotes.js';
 import { initBackground } from './background.js';
 import { initRouter, parseHash, replaceHash } from './router.js';
 import { initShortcuts } from './shortcuts.js';
+import { initVisualCard } from './visual-card.js';
 import { prefersReducedMotion, verseAyahs } from './util.js';
 
 const APP_TITLE = document.title;
@@ -282,6 +283,7 @@ async function main() {
   initAudio();
   initCatalog({ onOpenItem: openItem });
   initDetail({ onClose: onItemDialogClosed });
+  initVisualCard();
   initReservations();
   initJournal();
   flashcards.initFlashcards();

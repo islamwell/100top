@@ -3,12 +3,13 @@
 An interactive, offline-capable encyclopedia of **200 dimensions of Islam and the Quran** across 10 domains, with Arabic roots, verse
 recitation, responses to 20 common reservations, a private reflection journal and spaced-repetition flashcards.
 
-![Version](https://img.shields.io/badge/version-1.1.3-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
+![Version](https://img.shields.io/badge/version-1.1.4-gold.svg) ![License](https://img.shields.io/badge/license-MIT-emerald.svg)
 
 ## Features
 
 - **200 dimensions in 10 domains**: Arabic linguistics, Quranic sciences, theology, worship, tazkiyah, seerah, fiqh, civilization,
   daily life and cosmology. Each has the Arabic term, root, overview, deep dive, cited verse and a practical takeaway.
+- **Visual Share Cards (1080×1080)**: Download, copy or share high-resolution aesthetic cards with Quranic verses and thematic gems in Emerald Gold, Midnight Sapphire and Royal Onyx presets.
 - **Search** across titles, tags, verses and surah names. Arabic works with or without diacritics, roots can be typed as
   `S-L-M` / `k t b`, and `#42` jumps to an item.
 - **Recitation** of every cited verse from five reciters via EveryAyah. Multi-verse passages play through in order, with loop and

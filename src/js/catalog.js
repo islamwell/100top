@@ -28,7 +28,10 @@ function cardHtml(item) {
       <a class="btn-card-details" href="#dim-${item.id}" aria-label="Deep reflection: ${e(item.title)}">
         <span>Deep Reflection</span>${icon('arrow-right')}
       </a>
-      ${bookmarkButton(item)}
+      <div class="card-footer-actions">
+        <button type="button" class="btn-card-icon" data-card="${item.id}" title="Share visual card" aria-label="Generate visual card for ${e(item.title)}">${icon('image')}</button>
+        ${bookmarkButton(item)}
+      </div>
     </div>
   </article>`;
 }

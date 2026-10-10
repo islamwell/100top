@@ -27,6 +27,7 @@ function detailHtml(item) {
         <span class="card-category-tag" style="--domain-color:${e(cat?.color || '')}">${e(item.category)}</span>
       </div>
       <div class="detail-actions">
+        <button type="button" class="btn-icon" data-card="${item.id}" title="Generate Visual Share Card" aria-label="Generate visual share card">${icon('image')}</button>
         <button type="button" class="btn-icon" data-share="${item.id}" aria-label="Share this dimension">${icon('share-nodes')}</button>
         ${bookmarkButton(item, 'btn-bookmark-lg')}
       </div>
@@ -51,7 +52,10 @@ function detailHtml(item) {
     <section class="detail-gem">
       <h3 class="detail-kicker">Linguistic &amp; Thematic Gem</h3>
       <p class="detail-gem-text">“${e(item.quote)}”</p>
-      <button type="button" class="btn-copy-quote" data-copy-quote="${item.id}">${icon('copy')} Copy</button>
+      <div class="detail-gem-actions">
+        <button type="button" class="btn-copy-quote" data-copy-quote="${item.id}">${icon('copy')} Copy</button>
+        <button type="button" class="btn-copy-quote btn-card-gem" data-card="${item.id}">${icon('image')} Visual Card</button>
+      </div>
     </section>
 
     <section class="detail-practice">
