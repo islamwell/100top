@@ -500,12 +500,7 @@ async function renderCurrentCard() {
 
     const blob = await canvasToBlob(canvas);
     currentBlob = blob;
-    const url = URL.createObjectURL(blob);
-
-    if (dom.previewImg.src && dom.previewImg.src.startsWith('blob:')) {
-      URL.revokeObjectURL(dom.previewImg.src);
-    }
-    dom.previewImg.src = url;
+    dom.previewImg.src = canvas.toDataURL('image/png');
   } catch (err) {
     console.error('Failed to generate visual card', err);
     toast('Could not render visual card preview', { type: 'error' });
@@ -525,10 +520,7 @@ export function openVisualCardDialog(idOrItem) {
 
   openDialog(dom.overlay, {
     onClose: () => {
-      if (dom.previewImg.src && dom.previewImg.src.startsWith('blob:')) {
-        URL.revokeObjectURL(dom.previewImg.src);
-        dom.previewImg.src = '';
-      }
+      dom.previewImg.src = '';
       currentBlob = null;
     },
   });
