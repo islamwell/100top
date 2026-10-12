@@ -1,5 +1,5 @@
 // Static HTML pages for search engines, link previews and no-JS readers.
-import { escapeHtml as e, pad3, verseKey } from '../src/js/util.js';
+import { escapeHtml as e, verseKey } from '../src/js/util.js';
 import { splitRoot } from '../src/js/templates.js';
 
 function layout({ title, description, path, body, ctx, jsonLd }) {
@@ -62,7 +62,7 @@ export function renderItemPage(item, ctx) {
   const next = items[(pos + 1) % items.length];
   const root = splitRoot(item.root);
   const body = `      <article class="static-article">
-        <p class="detail-badges"><span class="card-id-badge">Dimension #${pad3(item.id)}</span> <span class="card-category-tag">${e(item.category)}</span></p>
+        <p class="detail-badges"><span class="card-id-badge">#${item.id}</span> <span class="card-category-tag">${e(item.category)}</span></p>
         <p class="modal-arabic-title font-arabic" lang="ar" dir="rtl">${e(item.arabic)}</p>
         <h1 class="modal-title">${e(item.title)}</h1>
         <p class="card-root-box detail-root"><strong>Linguistic Root:</strong> <span lang="ar" dir="rtl" class="root-letters">${e(root.arabic)}</span>${root.gloss ? ` <span class="root-gloss">(${e(root.gloss)})</span>` : ''}</p>
@@ -73,7 +73,7 @@ export function renderItemPage(item, ctx) {
         <section class="detail-practice"><h2 class="detail-kicker">Daily Practical Application</h2><p>${e(item.practicalTakeaway)}</p></section>
         <ul class="detail-tags">${item.tags.map((t) => `<li>#${e(t)}</li>`).join('')}</ul>
         <p class="static-cta"><a class="hero-cta" href="../../#dim-${item.id}">Open in the interactive encyclopedia (with recitation)</a></p>
-        <nav class="detail-nav" aria-label="Browse dimensions">
+        <nav class="detail-nav" aria-label="Browse topics">
           <a class="btn-filter-toggle" href="../${prev.id}/">← ${e(prev.title)}</a>
           <a class="btn-filter-toggle" href="../${next.id}/">${e(next.title)} →</a>
         </nav>
@@ -101,7 +101,7 @@ export function renderItemPage(item, ctx) {
 
 export function renderReservationPage(res, ctx) {
   const body = `      <article class="static-article">
-        <p class="detail-badges"><span class="card-id-badge">Reservation ${res.id} of ${ctx.data.reservations.length}</span> <span class="card-category-tag">${e(res.category)}</span></p>
+        <p class="detail-badges"><span class="card-id-badge">#${res.id}</span> <span class="card-category-tag">${e(res.category)}</span></p>
         <h1 class="modal-title">${e(res.title)}</h1>
         <div class="reservation-objection-box"><strong>The common reservation:</strong><p>“${e(res.reservation)}”</p></div>
         <div class="reservation-counter-text">${e(res.counterArgument)}</div>

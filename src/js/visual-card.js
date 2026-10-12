@@ -1,6 +1,6 @@
 // Aesthetic 1080×1080 Visual Share Card Generator for Dimensions.
 import { app } from './state.js';
-import { pad3, slugify, verseKey } from './util.js';
+import { slugify, verseKey } from './util.js';
 import { $, $$, closeDialog, copyText, openDialog, toast } from './ui.js';
 
 export const CARD_THEMES = {
@@ -300,7 +300,7 @@ export async function generateCardCanvas(item, themeName = 'emerald') {
   let curY = Math.max(76, Math.floor(76 + (remaining - gap * 3) / 2));
 
   // ─── Header: Dimension Badge ─────────────────────────────────────────────
-  const badgeText = `DIMENSION #${pad3(item.id)} · ${item.category.toUpperCase()}`;
+  const badgeText = `${item.id} · ${item.category.toUpperCase()}`;
   ctx.font = '800 13px Outfit, sans-serif';
   const badgeWidth = Math.min(600, ctx.measureText(badgeText).width + 36);
   const badgeX = 540 - badgeWidth / 2;
@@ -486,7 +486,7 @@ export function canvasToBlob(canvas) {
 }
 
 function cardFileName(item) {
-  return `100top-dimension-${pad3(item.id)}-${slugify(item.title)}.png`;
+  return `100top-${item.id}-${slugify(item.title)}.png`;
 }
 
 async function renderCurrentCard() {
@@ -516,7 +516,7 @@ export function openVisualCardDialog(idOrItem) {
   if (!item) return false;
 
   currentItem = item;
-  dom.indicator.textContent = `Dimension #${pad3(item.id)}`;
+  dom.indicator.textContent = `#${item.id}`;
 
   openDialog(dom.overlay, {
     onClose: () => {
@@ -566,9 +566,9 @@ async function handleCopy() {
   }
 
   // Fallback to text copy
-  const shareText = `Dimension #${pad3(currentItem.id)}: ${currentItem.title} (${currentItem.arabic})\n“${currentItem.quote}”\nhttps://100top-islam-quran.pages.dev/#dim-${currentItem.id}`;
+  const shareText = `#${currentItem.id}: ${currentItem.title} (${currentItem.arabic})\n“${currentItem.quote}”\nhttps://100top-islam-quran.pages.dev/#dim-${currentItem.id}`;
   const ok = await copyText(shareText);
-  toast(ok ? 'Direct image copy blocked; dimension text copied to clipboard' : 'Could not copy to clipboard', {
+  toast(ok ? 'Direct image copy blocked; text copied to clipboard' : 'Could not copy to clipboard', {
     type: ok ? 'info' : 'error',
   });
 }
@@ -582,7 +582,7 @@ async function handleShare() {
   const file = new File([currentBlob], filename, { type: 'image/png' });
   const shareData = {
     title: `${currentItem.title} · 100Top Islam & Quran`,
-    text: `Dimension #${pad3(currentItem.id)}: ${currentItem.title} (${currentItem.arabic})\n“${currentItem.quote}”`,
+    text: `#${currentItem.id}: ${currentItem.title} (${currentItem.arabic})\n“${currentItem.quote}”`,
     url: `https://100top-islam-quran.pages.dev/#dim-${currentItem.id}`,
   };
 
@@ -617,7 +617,7 @@ function handleNavigate(delta) {
   const nextItem = app.itemsById.get(ids[nextIdx]);
   if (nextItem) {
     currentItem = nextItem;
-    dom.indicator.textContent = `Dimension #${pad3(nextItem.id)}`;
+    dom.indicator.textContent = `#${nextItem.id}`;
     renderCurrentCard();
   }
 }

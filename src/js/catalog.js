@@ -1,7 +1,7 @@
 // The 200-dimension catalog: cards are rendered once, then filtered by toggling `hidden`.
 import { app, on, toggleBookmark } from './state.js';
 import { buildSearchIndex, filterItems } from './search.js';
-import { debounce, escapeHtml as e, icon, pad3 } from './util.js';
+import { debounce, escapeHtml as e, icon } from './util.js';
 import { rootBox, verseBox } from './templates.js';
 import { $, $$, toast, scrollToElement } from './ui.js';
 import { updateButtons } from './audio.js';
@@ -16,7 +16,7 @@ function cardHtml(item) {
   const cat = app.categoryById.get(item.category);
   return `<article class="concept-card" data-id="${item.id}" style="--domain-color: ${e(cat?.color || '#c9a227')}" aria-labelledby="card-title-${item.id}">
     <div class="card-header-top">
-      <span class="card-id-badge">#${pad3(item.id)}</span>
+      <span class="card-id-badge">${item.id}</span>
       <span class="card-category-tag">${e(cat?.short || item.category)}</span>
     </div>
     <div class="card-arabic-heading font-arabic" lang="ar" dir="rtl">${e(item.arabic)}</div>
@@ -25,11 +25,11 @@ function cardHtml(item) {
     <p class="card-summary">${e(item.summary)}</p>
     ${verseBox(`item:${item.id}`, item.verse)}
     <div class="card-footer">
-      <a class="btn-card-details" href="#dim-${item.id}" aria-label="Deep reflection: ${e(item.title)}">
-        <span>Deep Reflection</span>${icon('arrow-right')}
+      <a class="btn-card-details" href="#dim-${item.id}" aria-label="Explore: ${e(item.title)}">
+        <span>Explore</span>${icon('arrow-right')}
       </a>
       <div class="card-footer-actions">
-        <button type="button" class="btn-card-icon" data-card="${item.id}" title="Share visual card" aria-label="Generate visual card for ${e(item.title)}">${icon('image')}</button>
+        <button type="button" class="btn-card-icon" data-card="${item.id}" title="Visual card" aria-label="Generate visual card for ${e(item.title)}">${icon('image')}</button>
         ${bookmarkButton(item)}
       </div>
     </div>
@@ -57,7 +57,7 @@ function renderCategories() {
   const chip = (id, name, count) =>
     `<button type="button" class="category-chip${filters.category === id ? ' active' : ''}" data-cat="${e(id)}" aria-pressed="${filters.category === id}"><span>${e(name)}</span><span class="chip-count">${count}</span></button>`;
   dom.categories.innerHTML = [
-    chip('all', `All ${app.data.items.length}`, app.data.items.length),
+    chip('all', 'All', app.data.items.length),
     ...app.data.categories.map((c) => chip(c.id, c.name, counts.get(c.id) || 0)),
   ].join('');
 }
@@ -69,11 +69,11 @@ export function applyFilters() {
   const total = app.data.items.length;
   const n = visible.size;
   dom.count.textContent = filters.bookmarksOnly
-    ? `${n} bookmarked ${n === 1 ? 'dimension' : 'dimensions'}`
-    : `Showing ${n} of ${total} dimensions`;
+    ? `${n} saved ${n === 1 ? 'topic' : 'topics'}`
+    : `Showing ${n} of ${total} topics`;
   dom.cards.hidden = n === 0;
   dom.empty.hidden = n !== 0;
-  $('#empty-state-title').textContent = filters.bookmarksOnly && !app.bookmarks.size ? 'No bookmarks yet' : 'No matching dimensions found';
+  $('#empty-state-title').textContent = filters.bookmarksOnly && !app.bookmarks.size ? 'No saved topics yet' : 'No matching topics found';
 }
 
 export function setCategory(categoryId, { scroll = true } = {}) {
@@ -101,14 +101,28 @@ function syncBookmarkFilterButton() {
   dom.bookmarksBtn.setAttribute('aria-pressed', String(filters.bookmarksOnly));
 }
 
+let currentView = 'grid';
 function setView(mode) {
+  currentView = mode;
   const list = mode === 'list';
   dom.cards.classList.toggle('cards-list', list);
   dom.cards.classList.toggle('cards-grid', !list);
-  dom.gridBtn.classList.toggle('active', !list);
-  dom.listBtn.classList.toggle('active', list);
-  dom.gridBtn.setAttribute('aria-pressed', String(!list));
-  dom.listBtn.setAttribute('aria-pressed', String(list));
+  if (dom.viewToggle) {
+    dom.viewToggle.classList.toggle('active', list);
+    dom.viewToggle.setAttribute('aria-pressed', String(list));
+    const iconSpan = $('#view-toggle-icon', dom.viewToggle);
+    const labelSpan = $('#view-toggle-label', dom.viewToggle);
+    if (iconSpan) iconSpan.innerHTML = list ? icon('grip') : icon('list');
+    if (labelSpan) labelSpan.textContent = list ? 'Grid' : 'List';
+  }
+  if (dom.gridBtn) {
+    dom.gridBtn.classList.toggle('active', !list);
+    dom.gridBtn.setAttribute('aria-pressed', String(!list));
+  }
+  if (dom.listBtn) {
+    dom.listBtn.classList.toggle('active', list);
+    dom.listBtn.setAttribute('aria-pressed', String(list));
+  }
 }
 
 export function clearSearch() {
@@ -143,6 +157,7 @@ export function initCatalog({ onOpenItem }) {
     search: $('#search-input'),
     searchClear: $('#search-clear-btn'),
     bookmarksBtn: $('#filter-bookmarks-btn'),
+    viewToggle: $('#btn-view-toggle'),
     gridBtn: $('#view-grid-btn'),
     listBtn: $('#view-list-btn'),
   };
@@ -178,8 +193,9 @@ export function initCatalog({ onOpenItem }) {
     syncBookmarkFilterButton();
     applyFilters();
   });
-  dom.gridBtn.addEventListener('click', () => setView('grid'));
-  dom.listBtn.addEventListener('click', () => setView('list'));
+  dom.viewToggle?.addEventListener('click', () => setView(currentView === 'grid' ? 'list' : 'grid'));
+  dom.gridBtn?.addEventListener('click', () => setView('grid'));
+  dom.listBtn?.addEventListener('click', () => setView('list'));
 
   // Clicking anywhere on a card (outside its controls) opens the deep dive.
   dom.cards.addEventListener('click', (ev) => {

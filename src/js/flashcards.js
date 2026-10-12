@@ -1,7 +1,7 @@
 // Active-recall flashcards with Leitner spaced repetition.
 import { app, on, saveSrs } from './state.js';
 import { buildQueue, deckStats, formatInterval, intervalFor, isMastered, nextDueAt, review } from './srs.js';
-import { escapeHtml as e, icon, pad3 } from './util.js';
+import { escapeHtml as e, icon } from './util.js';
 import { rootBox, verseBox, verseRef, playButton } from './templates.js';
 import { $, $$, toast } from './ui.js';
 import { updateButtons } from './audio.js';
@@ -56,7 +56,7 @@ function statusBadge(item) {
 function termSide(item, { isAnswer }) {
   return `
     <div class="fc-top">
-      <span class="card-id-badge">${isAnswer ? `${icon('check')} Term` : `Card #${pad3(item.id)}`}</span>
+      <span class="card-id-badge">${isAnswer ? `${icon('check')} Term` : `#${item.id}`}</span>
       ${categoryTag(item)} ${isAnswer ? '' : statusBadge(item)}
     </div>
     <div class="fc-center">
@@ -75,7 +75,7 @@ function meaningSide(item, { isAnswer }) {
   if (!isAnswer) {
     return `
       <div class="fc-top">
-        <span class="card-id-badge">Card #${pad3(item.id)}</span>
+        <span class="card-id-badge">#${item.id}</span>
         ${categoryTag(item)} ${statusBadge(item)}
       </div>
       <div class="fc-center">
@@ -221,7 +221,7 @@ function fillCategorySelect() {
   const counts = new Map();
   app.data.items.forEach((i) => counts.set(i.category, (counts.get(i.category) || 0) + 1));
   dom.category.innerHTML = [
-    `<option value="all">All ${app.data.items.length} dimensions</option>`,
+    `<option value="all">All ${app.data.items.length} topics</option>`,
     ...app.data.categories.map((c) => `<option value="${e(c.id)}">${e(c.short)} (${counts.get(c.id) || 0})</option>`),
   ].join('');
 }

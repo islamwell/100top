@@ -1,6 +1,6 @@
 // Deep-dive dialog for a single dimension.
 import { app } from './state.js';
-import { escapeHtml as e, icon, pad3, verseKey } from './util.js';
+import { escapeHtml as e, icon, verseKey } from './util.js';
 import { rootBox, verseBox } from './templates.js';
 import { bookmarkButton } from './catalog.js';
 import { updateButtons } from './audio.js';
@@ -23,12 +23,12 @@ function detailHtml(item) {
   return `
     <div class="detail-top">
       <div class="detail-badges">
-        <span class="card-id-badge">Dimension #${pad3(item.id)}</span>
+        <span class="card-id-badge">#${item.id}</span>
         <span class="card-category-tag" style="--domain-color:${e(cat?.color || '')}">${e(item.category)}</span>
       </div>
       <div class="detail-actions">
-        <button type="button" class="btn-icon" data-card="${item.id}" title="Generate Visual Share Card" aria-label="Generate visual share card">${icon('image')}</button>
-        <button type="button" class="btn-icon" data-share="${item.id}" aria-label="Share this dimension">${icon('share-nodes')}</button>
+        <button type="button" class="btn-icon" data-card="${item.id}" title="Visual card" aria-label="Visual card">${icon('image')}</button>
+        <button type="button" class="btn-icon" data-share="${item.id}" title="Share" aria-label="Share">${icon('share-nodes')}</button>
         ${bookmarkButton(item, 'btn-bookmark-lg')}
       </div>
     </div>
@@ -67,8 +67,8 @@ function detailHtml(item) {
       ${item.tags.map((tag) => `<li>#${e(tag)}</li>`).join('')}
     </ul>
 
-    <nav class="detail-nav" aria-label="Browse dimensions">
-      <a class="btn-filter-toggle" href="#dim-${prevId}">${icon('arrow-left')} Previous</a>
+    <nav class="detail-nav" aria-label="Browse topics">
+      <a class="btn-filter-toggle" href="#dim-${prevId}">${icon('arrow-left')} Prev</a>
       <a class="btn-filter-toggle" href="#dim-${nextId}">Next ${icon('arrow-right')}</a>
     </nav>`;
 }

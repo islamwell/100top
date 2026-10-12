@@ -41,10 +41,33 @@ export function cycleTheme() {
   toast(`${nextTheme.label} theme`);
 }
 
+const SCALE_LABELS = {
+  sm: 'Text: Small',
+  md: 'Text: Normal',
+  lg: 'Text: Large',
+  xl: 'Text: XL',
+};
+const SCALE_ORDER = ['md', 'lg', 'xl', 'sm'];
+
+export function cycleArabicScale() {
+  const i = SCALE_ORDER.indexOf(scale);
+  const nextScale = SCALE_ORDER[(i + 1) % SCALE_ORDER.length];
+  applyArabicScale(nextScale);
+  const label = SCALE_LABELS[nextScale].replace('Text: ', '');
+  toast(`Arabic text: ${label}`);
+}
+
 export function applyArabicScale(id) {
   scale = id;
   document.documentElement.dataset.arabicScale = id;
   saveString(STORAGE_KEYS.arabicScale, id);
+  const labelEl = $('#arabic-scale-label');
+  if (labelEl) labelEl.textContent = SCALE_LABELS[id] || 'Text: Normal';
+  const toggleBtn = $('#btn-arabic-scale-toggle');
+  if (toggleBtn) {
+    toggleBtn.classList.toggle('active', id !== 'md');
+    toggleBtn.setAttribute('aria-pressed', String(id !== 'md'));
+  }
   $$('[data-scale]').forEach((btn) => {
     const active = btn.dataset.scale === id;
     btn.classList.toggle('active', active);
@@ -55,8 +78,9 @@ export function applyArabicScale(id) {
 export function initPrefs() {
   applyTheme(theme);
   applyArabicScale(scale);
-  $('#theme-toggle-btn').addEventListener('click', cycleTheme);
-  $('#arabic-scale-group').addEventListener('click', (ev) => {
+  $('#theme-toggle-btn')?.addEventListener('click', cycleTheme);
+  $('#btn-arabic-scale-toggle')?.addEventListener('click', cycleArabicScale);
+  $('#arabic-scale-group')?.addEventListener('click', (ev) => {
     const btn = ev.target.closest('[data-scale]');
     if (btn) applyArabicScale(btn.dataset.scale);
   });
