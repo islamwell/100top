@@ -1,6 +1,7 @@
 // Aesthetic 1080×1080 Visual Share Card Generator for Dimensions.
 import { app } from './state.js';
 import { slugify, verseKey } from './util.js';
+import { splitRoot } from './templates.js';
 import { $, $$, closeDialog, copyText, openDialog, toast } from './ui.js';
 
 export const CARD_THEMES = {
@@ -352,7 +353,10 @@ export async function generateCardCanvas(item, themeName = 'emerald') {
   // ─── Header: Root Badge ──────────────────────────────────────────────────
   if (item.root) {
     curY += 6;
-    const rootLine = `[ ROOT: ${item.root.letters.join(' · ')} ]  —  ${item.root.meaning}`;
+    const { arabic: rootArabic, gloss: rootGloss } = splitRoot(item.root);
+    const rootLine = rootGloss
+      ? `[ ROOT: ${rootArabic} ]  —  ${rootGloss}`
+      : `[ ROOT: ${rootArabic} ]`;
     ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
     const rootW = Math.min(840, ctx.measureText(rootLine).width + 32);
     const rootX = 540 - rootW / 2;
@@ -369,7 +373,7 @@ export async function generateCardCanvas(item, themeName = 'emerald') {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = theme.rootLetters;
-    ctx.fillText(rootLine, 540, curY + 13);
+    ctx.fillText(rootLine, 540, curY + 13, 800);
     curY += 26;
   }
 
@@ -481,7 +485,37 @@ export async function generateCardCanvas(item, themeName = 'emerald') {
 
 export function canvasToBlob(canvas) {
   return new Promise((resolve) => {
-    canvas.toBlob((blob) => resolve(blob), 'image/png');
+    if (!canvas) {
+      resolve(null);
+      return;
+    }
+    if (typeof canvas.toBlob === 'function') {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          try {
+            const dataUrl = canvas.toDataURL('image/png');
+            const bin = atob(dataUrl.split(',')[1]);
+            const arr = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+            resolve(new Blob([arr], { type: 'image/png' }));
+          } catch {
+            resolve(null);
+          }
+        }
+      }, 'image/png');
+    } else {
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const bin = atob(dataUrl.split(',')[1]);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        resolve(new Blob([arr], { type: 'image/png' }));
+      } catch {
+        resolve(null);
+      }
+    }
   });
 }
 
@@ -498,9 +532,11 @@ async function renderCurrentCard() {
     const canvas = await generateCardCanvas(currentItem, currentThemeId);
     if (version !== renderVersion) return; // Superceded by faster click
 
-    const blob = await canvasToBlob(canvas);
-    currentBlob = blob;
     dom.previewImg.src = canvas.toDataURL('image/png');
+
+    const blob = await canvasToBlob(canvas);
+    if (version !== renderVersion) return;
+    currentBlob = blob;
   } catch (err) {
     console.error('Failed to generate visual card', err);
     toast('Could not render visual card preview', { type: 'error' });

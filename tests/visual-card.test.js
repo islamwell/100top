@@ -50,3 +50,50 @@ describe('wrapText', () => {
     }
   });
 });
+
+describe('generateCardCanvas', () => {
+  it('generates card canvas for items across all themes without throwing', async () => {
+    const { generateCardCanvas } = await import('../src/js/visual-card.js');
+
+    const fakeCanvas = {
+      width: 0,
+      height: 0,
+      getContext: () => ({
+        createRadialGradient: () => ({ addColorStop: () => {} }),
+        fillRect: () => {},
+        beginPath: () => {},
+        arc: () => {},
+        arcTo: () => {},
+        rect: () => {},
+        stroke: () => {},
+        fill: () => {},
+        moveTo: () => {},
+        lineTo: () => {},
+        closePath: () => {},
+        save: () => {},
+        restore: () => {},
+        rotate: () => {},
+        translate: () => {},
+        measureText: (text) => ({ width: (text || '').length * 8 }),
+        fillText: () => {},
+      }),
+    };
+
+    const originalDoc = global.document;
+    global.document = {
+      fonts: { ready: Promise.resolve() },
+      createElement: () => fakeCanvas,
+    };
+
+    try {
+      for (const item of data.items.slice(0, 15)) {
+        for (const theme of ['emerald', 'midnight', 'onyx']) {
+          const canvas = await generateCardCanvas(item, theme);
+          expect(canvas).toBeDefined();
+        }
+      }
+    } finally {
+      global.document = originalDoc;
+    }
+  });
+});
